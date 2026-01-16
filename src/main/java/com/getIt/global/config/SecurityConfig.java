@@ -1,7 +1,7 @@
-package com.getit.backend.global.config;
+package com.getit.global.config;
 
-import com.getit.backend.global.jwt.JwtAuthenticationFilter;
-import com.getit.backend.global.jwt.JwtTokenProvider;
+import com.getit.global.jwt.JwtAuthenticationFilter;
+import com.getit.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
