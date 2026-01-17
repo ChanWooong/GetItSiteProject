@@ -1,8 +1,7 @@
 package com.getit.domain.member.service;
 
 import com.getit.domain.member.entity.Member;
-import com.getit.domain.member.*;
-import com.getit.domain.member.entity.Role;
+import com.getit.domain.member.Role;
 import com.getit.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

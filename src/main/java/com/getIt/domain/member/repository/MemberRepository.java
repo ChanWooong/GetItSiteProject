@@ -2,7 +2,7 @@ package com.getit.domain.member.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.getit.domain.member.entity.Member;
-import com.getit.domain.member.entity.Role;
+import com.getit.domain.member.Role;
 import java.util.Optional;
 import java.util.List;
 

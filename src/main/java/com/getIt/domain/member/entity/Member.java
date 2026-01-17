@@ -1,10 +1,8 @@
 package com.getit.domain.member.entity;
 
-import com.getit.domain.member.entity.Role;
+import com.getit.domain.member.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
