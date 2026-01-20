@@ -12,7 +12,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByStudentId(Long studentId);
 
-    List<Member> findByTrack(String track);
-
     List<Member> findByRole(Role role);
 }

@@ -1,2 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/getit_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
 jwt:
-  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
+  secret: VlwEyVljeMRxYy1vYmFzZTY0S2V5R2VuZXJhdGVkRm9yVGVzdGluZ1B1cnBvc2VPbmx5DonNotUseThisInProduction
