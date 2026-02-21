@@ -1,6 +1,7 @@
 package com.getit.domain.member.entity;
 
 import com.getit.domain.member.Role;
+import com.getit.domain.member.SocialType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,32 +20,16 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 20)
-    private Long studentId;
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    @Column(nullable = false, length = 50)
-    private String name;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private Boolean isApproved = false; // 기본값 false , 관리자 승인 후  true로 변경
+    private String socialId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role; // GUEST, MEMBER, ADMIN만 존재
+    private SocialType socialType;
 
-    @Builder
-    public Member(Long studentId, String password, String name, Role role) {
-        this.studentId = studentId;
-        this.password = password;
-        this.name = name;
-        this.role = role;
-    }
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public void approve(){
-        this.isApproved = true;
-        this.role = Role.ROLE_MEMBER;
-    }
+    private boolean hasInfo = false;
 }
