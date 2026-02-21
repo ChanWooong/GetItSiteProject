@@ -30,7 +30,8 @@ public class AuthService {
                 .studentId(request.getStudentId())
                 .password(encodedPassword)
                 .name(request.getName())
-                .role(Role.ROLE_MEMBER)
+                .role(Role.ROLE_GUEST)
+                .isApproved(false)
                 .build();
 
         memberRepository.save(member);
