@@ -2,6 +2,8 @@ package com.getit.global.config;
 
 import com.getit.global.jwt.JwtAuthenticationFilter;
 import com.getit.global.jwt.JwtTokenProvider;
+import com.getit.global.security.handler.OAuth2SuccessHandler;
+import com.getit.domain.auth.service.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,19 +21,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final OAuth2SuccessHandler successHandler;
+    private final OAuth2UserService oAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // REST API이므로 CSRF 보안 필요 없음
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 미사용
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/error").permitAll() // 로그인, 회원가입은 누구나 접근 가능
-                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")     // 관리자 페이지 권한 설정
-                        .anyRequest().authenticated()                          // 나머지는 인증 필요
+                        .requestMatchers("/", "/login/**", "/oauth2/**").permitAll()
+                        .requestMatchers("/api/member/info").hasAnyRole("GUEST", "USER")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // 필터 등록
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                        .successHandler(successHandler)
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
