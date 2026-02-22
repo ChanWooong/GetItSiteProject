@@ -20,14 +20,13 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findPendingMembers());
     }
 
-    //권한 허용 API
     @PatchMapping("/{memberId}/approve")
-    @PreAuthorize("hasRole('ADMIN')") // 운영진만 사용 가능한 API
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> approveMember(@PathVariable Long memberId) {
         System.out.println("로그인한 유저: " + SecurityContextHolder.getContext().getAuthentication().getName());
         System.out.println("보유 권한: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         memberService.approveMember(memberId);
         return ResponseEntity.ok("멤버 승인이 완료되었습니다.");
-
     }
+
 }
