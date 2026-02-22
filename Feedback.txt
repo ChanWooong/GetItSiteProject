@@ -1,0 +1,1 @@
+No property 'track' found for type 'Member' -> 정의 여부를 명확하게 하고 선언하지 않고 호출하지 않도록 함.
