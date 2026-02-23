@@ -52,7 +52,7 @@ public class MemberService {
                 .member(member)
                 .name(dto.getName())
                 .studentId(dto.getStudentId())
-                .collage(dto.getCollage())
+                .college(dto.getCollege())
                 .department(dto.getDepartment())
                 .cellNum(dto.getCellNum())
                 .build();
