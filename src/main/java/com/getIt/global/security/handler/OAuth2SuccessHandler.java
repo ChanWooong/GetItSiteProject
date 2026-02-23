@@ -1,7 +1,9 @@
 package com.getit.global.security.handler;
 
 import com.getit.domain.auth.dto.PrincipalDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import com.getit.domain.member.entity.Member;
 import com.getit.global.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -20,6 +21,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Value("${app.auth.redirect-uri}")
+    private String redirectUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -28,12 +32,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Member member = principalDetails.getMember();
 
         String accessToken = jwtTokenProvider.createAccessToken(member);
-        System.out.println("발급된 Access Token: Bearer " + accessToken);
 
-        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/auth/callback")
-                .queryParam("token", accessToken)
-                .build().toUriString();
-
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Lax")
+                .maxAge(3600)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
