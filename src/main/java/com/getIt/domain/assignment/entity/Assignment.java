@@ -43,10 +43,6 @@ public class Assignment {
     @JoinColumn(name = "member_id", nullable = false,  updatable = false)
     private Member member;
 
-    @NotBlank
-    @Column(name = "file_path", nullable = false, length = 255)
-    private String filePath;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column
@@ -65,6 +61,5 @@ public class Assignment {
     private Assignment(Task task, Member member, String filePath) {
         this.task = task;
         this.member = member;
-        this.filePath = filePath;
     }
 }
