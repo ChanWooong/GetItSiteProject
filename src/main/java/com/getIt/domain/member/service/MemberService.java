@@ -58,6 +58,6 @@ public class MemberService {
                 .build();
 
         memberInfoRepository.save(info);
-
+        member.completeInfo();
     }
 }
