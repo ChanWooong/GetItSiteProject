@@ -39,15 +39,16 @@ public class Member {
 
     // 1:1 관계 설정 (MemberInfo와 연결)
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // 불필요한 조인을 방지하기 위해.
     private MemberInfo memberInfo;
 
     public void completeInfo() {
         this.hasInfo = true;
     }
-    public void updateToMember() {
+    public void registMember() {
         this.role = Role.ROLE_MEMBER;
     }
-    public Member update(String email) {
+    public Member updateEmail(String email) {
         this.email = email;
         return this;
     }

@@ -34,7 +34,7 @@ public class MemberService {
         if (member.getRole() == Role.ROLE_MEMBER) {
             throw new IllegalStateException("이미 승인된 사용자입니다.");
         }
-        member.updateToMember();
+        member.registMember();
     }
 
     public List<MemberResponse> findPendingMembers() {
