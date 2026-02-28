@@ -24,14 +24,21 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    private final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L; // 30분
-    private final long REFRESH_TOKEN_VALID_TIME = 14 * 24 * 60 * 60 * 1000L; // 14일 (2주)
+    private final long accessTokenValidTime; // 30분
+    private final long refreshTokenValidTime; // 14일 (2주)
     private final MemberRepository memberRepository;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, MemberRepository memberRepository) {
+    public JwtTokenProvider(
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.access-token-expiration-minutes}") long accessMinutes,
+            @Value("${jwt.refresh-token-expiration-days}") long refreshDays,
+            MemberRepository memberRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.memberRepository = memberRepository;
+
+        this.accessTokenValidTime = accessMinutes * 60 * 1000L;
+        this.refreshTokenValidTime = refreshDays * 24 * 60 * 60 * 1000L;
     }
 
     public String createAccessToken(Member member) {
@@ -43,7 +50,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME))
+                .setExpiration(new Date(now.getTime() + accessTokenValidTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -55,7 +62,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME))
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
