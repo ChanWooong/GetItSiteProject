@@ -34,6 +34,13 @@ public class OAuthAttributes {
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+        String name = (String) attributes.get("name");
+        String email = (String) attributes.get("email");
+
+        if(name == null || email == null){
+            throw new IllegalArgumentException("Google 계정 정보가 누락되었습니다.");
+        }
+
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
