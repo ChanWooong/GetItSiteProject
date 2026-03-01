@@ -37,8 +37,11 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.memberRepository = memberRepository;
 
-        this.accessTokenValidTime = accessMinutes * 60 * 1000L;
-        this.refreshTokenValidTime = refreshDays * 24 * 60 * 60 * 1000L;
+        if (accessMinutes <= 0 || refreshDays <= 0) {
+            throw new IllegalArgumentException("JWT expiration values must be positive.");
+        }
+        this.accessTokenValidTime = Math.multiplyExact(accessMinutes, 60_000L);
+        this.refreshTokenValidTime = Math.multiplyExact(refreshDays, 86_400_000L);
     }
 
     public String createAccessToken(Member member) {
