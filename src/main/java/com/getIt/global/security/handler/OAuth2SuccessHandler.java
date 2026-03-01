@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
+import java.time.Duration;
 import java.io.IOException;
 
 @Component
@@ -23,6 +23,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Value("${app.auth.redirect-uri}")
     private String redirectUrl;
+
+    @Value("${jwt.access-token-expiration-minutes}")
+    private long accessTokenExpirationMinutes;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -38,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .maxAge(3600)
+                .maxAge(Duration.ofMinutes(accessTokenExpirationMinutes))
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
