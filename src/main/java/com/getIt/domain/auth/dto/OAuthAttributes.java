@@ -15,17 +15,15 @@ public class OAuthAttributes {
     private String name;
     private String email;
     private SocialType socialType;
-    private String socialId;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
-                           String name, String email, SocialType socialType, String socialId) {
+                           String name, String email, SocialType socialType) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
         this.socialType = socialType;
-        this.socialId = socialId;
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
@@ -39,7 +37,6 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .socialId((String) attributes.get("sub"))
                 .socialType(SocialType.GOOGLE)
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
@@ -62,7 +59,6 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) profile.get("nickname"))
                 .email(email)
-                .socialId(String.valueOf(attributes.get("id"))) // 카카오는 id가 Long 타입임
                 .socialType(SocialType.KAKAO)
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
