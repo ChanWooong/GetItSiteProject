@@ -3,6 +3,7 @@ package com.getit.domain.member.controller;
 import com.getit.domain.auth.dto.PrincipalDetails;
 import com.getit.domain.member.dto.MemberInfoRequest;
 import com.getit.domain.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,8 +22,8 @@ public class MemberInfoController {
     @PostMapping("/info")
     public ResponseEntity<String> registerMemberInfo(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody MemberInfoRequest requestDto) {
+            @Valid @RequestBody MemberInfoRequest requestDto) {
         memberService.saveMemberInfo(principalDetails.getMember().getId(), requestDto);
-        return ResponseEntity.ok("추가 정보 등록이 완료되었습니다. 관리자 승인을 기다려주세요.");
+        return ResponseEntity.ok("추가 정보 등록이 완료되었습니다.");
     }
 }

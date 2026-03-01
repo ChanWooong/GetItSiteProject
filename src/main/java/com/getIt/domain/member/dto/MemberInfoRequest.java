@@ -1,5 +1,6 @@
 package com.getit.domain.member.dto;
 
+import com.getit.domain.member.College;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -15,10 +16,11 @@ public class MemberInfoRequest {
     private String name;
 
     @NotNull(message = "학번은 필수 입력 항목입니다.")
-    private Long studentId;
+    @Pattern(regexp = "^[0-9]{10}$", message="학번은 숫자 10자리여야 합니다.")
+    private String studentId;
 
-    @NotBlank(message = "단과대학은 필수 입력 항목입니다.")
-    private String collage;
+    @NotNull(message = "단과대학은 필수 항목입니다.")
+    private College college;
 
     @NotBlank(message = "학과(부)는 필수 입력 항목입니다.")
     private String department;

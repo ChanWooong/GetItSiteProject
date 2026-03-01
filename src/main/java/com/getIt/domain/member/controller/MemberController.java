@@ -23,8 +23,6 @@ public class MemberController {
     @PatchMapping("/{memberId}/approve")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> approveMember(@PathVariable Long memberId) {
-        System.out.println("로그인한 유저: " + SecurityContextHolder.getContext().getAuthentication().getName());
-        System.out.println("보유 권한: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         memberService.approveMember(memberId);
         return ResponseEntity.ok("멤버 승인이 완료되었습니다.");
     }
