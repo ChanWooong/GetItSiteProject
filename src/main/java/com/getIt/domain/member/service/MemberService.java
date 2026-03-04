@@ -40,7 +40,7 @@ public class MemberService {
     public List<MemberResponse> findPendingMembers() {
         return memberRepository.findAllByRoleAndHasInfoTrue(Role.ROLE_GUEST).stream()
                 .map(MemberResponse::from)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // null이 뜰 가능성이 있음. 한번 다시 확인 ( optional이라는 클래스를 사용해야할지도 모름 ) -> repo에서부터 mapping 해서 들고와야함.
     }
 
     @Transactional
