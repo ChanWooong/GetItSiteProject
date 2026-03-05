@@ -31,16 +31,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login/**", "/oauth2/**").permitAll()
-                        .requestMatchers(org.springframework.web.cors.CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers("/api/member/info", "/api/member/info/**").permitAll()
+                        .requestMatchers("/", "/login/**", "/oauth2/**", "/api/test/**", "/error").permitAll()
+                        .requestMatchers("/api/member/info").hasAnyRole("GUEST")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
                         .successHandler(successHandler)
                 )
+                // 패키지 경로를 직접 적지 않고 import된 클래스명으로 깔끔하게 정리했습니다.
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 

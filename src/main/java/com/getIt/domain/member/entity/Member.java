@@ -45,5 +45,8 @@ public class Member {
     public void registMember() {
         this.role = Role.ROLE_MEMBER;
     }
-
+    public Member updateEmail(String email) {
+        this.email = email;
+        return this;
+    }
 }
