@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,13 @@ public class ApplyController {
             @Valid @RequestBody ApplyRequest request) {
         applyService.submit(principalDetails.getMember().getId(), request);
         return ResponseEntity.ok(ApplyResponse.success("지원서가 제출되었습니다."));
+    }
+
+    @PutMapping("/draft")
+    public ResponseEntity<ApplyResponse> saveDraft(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @Valid @RequestBody ApplyRequest request) {
+        applyService.saveDraft(principalDetails.getMember().getId(), request);
+        return ResponseEntity.ok(ApplyResponse.success("작성 중인 내용이 임시 저장되었습니다."));
     }
 }
