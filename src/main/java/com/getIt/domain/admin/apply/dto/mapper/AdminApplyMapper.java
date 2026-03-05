@@ -2,7 +2,7 @@ package com.getit.domain.admin.apply.dto.mapper;
 
 import com.getit.domain.admin.apply.dto.response.AdminApplyDetailResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
-import com.getit.domain.admin.apply.entity.Application;
+import com.getit.domain.apply.entity.Application;
 
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class AdminApplyMapper {
 
         return AdminApplyListResponse.builder()
                 .id(application.getId())
-                .memberId(application.getMemberId())
+                .memberId(application.getMember().getId())
                 .isDraft(application.getIsDraft())
                 .build();
     }
@@ -25,7 +25,7 @@ public class AdminApplyMapper {
 
         return AdminApplyDetailResponse.builder()
                 .id(application.getId())
-                .memberId(application.getMemberId())
+                .memberId(application.getMember().getId())
                 .answers(application.getAnswerList())
                 .isDraft(application.getIsDraft())
                 .build();
