@@ -39,7 +39,10 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private Member saveOrUpdate(OAuthAttributes attributes) {
-        return memberRepository.findByEmail(attributes.getEmail())
-                .orElseGet(() -> memberRepository.save(attributes.toEntity()));
+        Member member = memberRepository.findBySocialIdAndSocialType(attributes.getSocialId(), attributes.getSocialType())
+                .map(entity -> entity.update(attributes.getEmail()))
+                .orElseGet(attributes::toEntity);
+
+        return memberRepository.save(member);
     }
 }
