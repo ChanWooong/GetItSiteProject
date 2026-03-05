@@ -29,21 +29,31 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login/**", "/oauth2/**", "/api/test/**", "/error").permitAll()
+                        .requestMatchers("/", "/login/**", "/oauth2/**", "/error").permitAll()
+                        .requestMatchers("/api/test/**").permitAll()
+
                         .requestMatchers("/api/member/info").hasAnyRole("GUEST")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
+
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                        .userInfoEndpoint(userInfo ->
+                                userInfo.userService(oAuth2UserService))
                         .successHandler(successHandler)
                 )
-                // 패키지 경로를 직접 적지 않고 import된 클래스명으로 깔끔하게 정리했습니다.
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+
+                // JWT 인증 필터 등록
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(jwtTokenProvider),
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

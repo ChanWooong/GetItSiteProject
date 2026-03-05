@@ -42,11 +42,17 @@ public class Member {
     public void completeInfo() {
         this.hasInfo = true;
     }
+
     public void registMember() {
         this.role = Role.ROLE_MEMBER;
     }
-    public Member updateEmail(String email) {
+
+    public void updateEmail(String email) {
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("이메일은 null 이거나 공백일 수 없습니다.");
+        }
+
         this.email = email;
-        return this;
     }
 }
