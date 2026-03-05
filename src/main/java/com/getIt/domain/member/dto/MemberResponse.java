@@ -1,5 +1,6 @@
 package com.getit.domain.member.dto;
 
+import com.getit.domain.member.College;
 import com.getit.domain.member.Role;
 import com.getit.domain.member.entity.Member;
 import com.getit.domain.member.entity.MemberInfo;
@@ -19,8 +20,8 @@ public class MemberResponse {
     private boolean hasInfo;
 
     private String name;
-    private Long studentId;
-    private String collage;
+    private String studentId;
+    private College college;
     private String department;
     private String cellNum;
 
@@ -35,7 +36,7 @@ public class MemberResponse {
                 .hasInfo(member.isHasInfo())
                 .name(info != null ? info.getName() : null)
                 .studentId(info != null ? info.getStudentId() : null)
-                .collage(info != null ? info.getCollage() : null)
+                .college(info != null ? info.getCollege() : null)
                 .department(info != null ? info.getDepartment() : null)
                 .cellNum(info != null ? info.getCellNum() : null)
                 .build();

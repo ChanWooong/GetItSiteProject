@@ -2,6 +2,7 @@ package com.getit.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.getit.domain.member.College;
 
 @Entity
 @Getter
@@ -22,13 +23,14 @@ public class MemberInfo {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private Long studentId;
+    private String studentId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private College college;
 
     @Column(nullable = false)
-    private String collage;
-
-    @Column(nullable = false)
-    private String department;
+    private String department; //너무 많아서 조금 더 고민을 해보는 것이 좋을 듯.
 
     @Column(nullable = false)
     private String cellNum;

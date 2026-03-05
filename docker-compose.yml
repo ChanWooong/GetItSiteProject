@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/getit_db
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - APP_AUTH_REDIRECT_URI=${APP_AUTH_REDIRECT_URI}      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TOKEN_EXPIRATION_MINUTES=${JWT_ACCESS_TOKEN_MINUTES}
+      - JWT_REFRESH_TOKEN_EXPIRATION_DAYS=${JWT_REFRESH_TOKEN_DAYS}
+    depends_on: [db]
+  db:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=getit_db
+    volumes: [db_data:/var/lib/mysql]
+volumes: { db_data: }

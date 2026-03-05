@@ -20,9 +20,6 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
-    private String socialId;
-
     @Enumerated(EnumType.STRING)
     private SocialType socialType; // GOOGLE, KAKAO 등 저장
 
@@ -39,16 +36,23 @@ public class Member {
 
     // 1:1 관계 설정 (MemberInfo와 연결)
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // 불필요한 조인을 방지하기 위해.
     private MemberInfo memberInfo;
 
     public void completeInfo() {
         this.hasInfo = true;
     }
-    public void updateToMember() {
+
+    public void registMember() {
         this.role = Role.ROLE_MEMBER;
     }
-    public Member update(String email) {
+
+    public void updateEmail(String email) {
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("이메일은 null 이거나 공백일 수 없습니다.");
+        }
+
         this.email = email;
-        return this;
     }
 }

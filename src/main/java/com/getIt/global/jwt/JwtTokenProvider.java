@@ -6,6 +6,7 @@ import com.getit.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,14 +25,24 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    private final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L; // 30분
-    private final long REFRESH_TOKEN_VALID_TIME = 14 * 24 * 60 * 60 * 1000L; // 14일 (2주)
+    private final long accessTokenValidTime; // 30분
+    private final long refreshTokenValidTime; // 14일 (2주)
     private final MemberRepository memberRepository;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, MemberRepository memberRepository) {
+    public JwtTokenProvider(
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.access-token-expiration-minutes}") long accessMinutes,
+            @Value("${jwt.refresh-token-expiration-days}") long refreshDays,
+            MemberRepository memberRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.memberRepository = memberRepository;
+
+        if (accessMinutes <= 0 || refreshDays <= 0) {
+            throw new IllegalArgumentException("JWT expiration values must be positive.");
+        }
+        this.accessTokenValidTime = Math.multiplyExact(accessMinutes, 60_000L);
+        this.refreshTokenValidTime = Math.multiplyExact(refreshDays, 86_400_000L);
     }
 
     public String createAccessToken(Member member) {
@@ -43,7 +54,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME))
+                .setExpiration(new Date(now.getTime() + accessTokenValidTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -55,7 +66,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME))
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -105,6 +116,14 @@ public class JwtTokenProvider {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
+        }
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
         return null;
     }
