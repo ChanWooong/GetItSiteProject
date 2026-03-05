@@ -23,4 +23,13 @@ public class ApplyDraftLoadResponse {
                 .data(data)
                 .build();
     }
+
+    /** 드래프트 미존재 시 일관된 응답 스키마 (success=false, data=null) */
+    public static ApplyDraftLoadResponse notFound(String message) {
+        return ApplyDraftLoadResponse.builder()
+                .success(false)
+                .message(message)
+                .data(null)
+                .build();
+    }
 }
