@@ -1,5 +1,6 @@
 package com.getit.domain.admin.apply.controller;
 
+import com.getit.domain.admin.apply.dto.response.AdminApplicantInfoResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyDetailResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
 import com.getit.domain.admin.apply.service.AdminApplyService;
@@ -96,6 +97,23 @@ public class AdminApplyController {
                 .build();
 
         return ResponseEntity.status(status).body(error);
+    }
+
+    @GetMapping("/{id}/info")
+    public ResponseEntity<?> getApplicantInfo(@PathVariable Long id) {
+        try {
+            AdminApplicantInfoResponse response = adminApplyService.getApplicantInfo(id);
+            return ResponseEntity.ok(java.util.Map.of(
+                    "success", true,
+                    "message", "지원자 정보를 성공적으로 불러왔습니다.",
+                    "data", response
+            ));
+        } catch (EntityNotFoundException e) {
+            return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            log.error("지원자 정보 조회 중 오류 발생. id={}", id, e);
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "지원자 정보 조회 중 서버 오류가 발생했습니다.");
+        }
     }
 
     // 에러 응답 DTO
