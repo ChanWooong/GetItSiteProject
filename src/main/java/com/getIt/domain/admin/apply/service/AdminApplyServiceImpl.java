@@ -1,5 +1,6 @@
 package com.getit.domain.admin.apply.service;
 
+import com.getit.domain.admin.apply.dto.response.AdminApplicantInfoResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyDetailResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
 import com.getit.domain.admin.apply.dto.mapper.AdminApplyMapper;
@@ -63,5 +64,23 @@ public class AdminApplyServiceImpl implements AdminApplyService {
                 );
 
         return adminApplyMapper.toDetailResponse(application);
+    }
+
+    @Override
+    public AdminApplicantInfoResponse getApplicantInfo(Long applicationId) {
+        Application application = adminApplyRepository.findByIdWithMember(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 지원서를 찾을 수 없습니다."));
+
+        MemberInfo info = application.getMember().getMemberInfo();
+
+        return AdminApplicantInfoResponse.builder()
+                .memberId(application.getMember().getId())
+                .name(info != null ? info.getName() : null)
+                .studentId(info != null ? info.getStudentId() : null)
+                .college(info != null ? info.getCollege().name() : null)
+                .department(info != null ? info.getDepartment() : null)
+                .cellNum(info != null ? info.getCellNum() : null)
+                .email(application.getMember().getEmail())
+                .build();
     }
 }
