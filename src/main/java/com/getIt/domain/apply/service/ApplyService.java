@@ -25,7 +25,10 @@ public class ApplyService {
     public void submit(Long memberId, ApplyRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-
+        boolean alreadySubmitted = applicationRepository.existsByMemberAndIsDraftFalse(member);
+        if(alreadySubmitted){
+            throw new IllegalStateException("이미 지원서를 제출하셨습니다.");
+        }
         Application application = Application.builder()
                 .member(member)
                 .answer1(request.getAnswer1())
@@ -33,6 +36,8 @@ public class ApplyService {
                 .answer3(request.getAnswer3())
                 .answer4(request.getAnswer4())
                 .answer5(request.getAnswer5())
+                .answer6(request.getAnswer6())
+                .answer7(request.getAnswer7())
                 .isDraft(false)
                 .build();
 

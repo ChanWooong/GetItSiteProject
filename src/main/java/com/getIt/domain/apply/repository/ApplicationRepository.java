@@ -16,4 +16,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     void deleteByMemberAndIsDraftTrue(Member member);
 
     void deleteByMemberAndIsDraftTrueAndIdNot(Member member, Long id);
+
+    boolean existsByMemberAndIsDraftFalse(Member member);
 }
