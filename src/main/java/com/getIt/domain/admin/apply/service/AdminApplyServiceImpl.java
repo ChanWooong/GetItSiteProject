@@ -56,7 +56,7 @@ public class AdminApplyServiceImpl implements AdminApplyService {
     public AdminApplyDetailResponse getApplyDetail(Long id) {
 
         Application application = adminApplyRepository
-                .findById(id)
+                .findByIdWithMember(id)
                 .filter(app -> !app.getIsDraft())
                 .orElseThrow(() ->
                         new EntityNotFoundException("해당 지원서를 찾을 수 없습니다.")
