@@ -3,6 +3,7 @@ package com.getit.domain.admin.apply.dto.mapper;
 import com.getit.domain.admin.apply.dto.response.AdminApplyDetailResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
 import com.getit.domain.apply.entity.Application;
+import com.getit.domain.member.entity.MemberInfo;
 
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,15 @@ public class AdminApplyMapper {
 
     //  상세 조회용 DTO 변환
     public AdminApplyDetailResponse toDetailResponse(Application application) {
+        MemberInfo memberInfo = application.getMember().getMemberInfo();
 
         return AdminApplyDetailResponse.builder()
                 .id(application.getId())
                 .memberId(application.getMember().getId())
                 .answers(application.getAnswerList())
                 .isDraft(application.getIsDraft())
+                .name(memberInfo != null ? memberInfo.getName() : "정보 없음")
+                .department(memberInfo != null ? memberInfo.getDepartment() : "정보 없음")
                 .build();
     }
 }

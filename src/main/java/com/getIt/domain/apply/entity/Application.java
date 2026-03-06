@@ -50,6 +50,8 @@ public class Application {
     @Column(name = "is_draft", nullable = false)
     private Boolean isDraft;
 
+
+
     //  answer1~N을 List 형태로 반환하는 편의 메서드
     public List<String> getAnswerList() {
         List<String> answers = new ArrayList<>();

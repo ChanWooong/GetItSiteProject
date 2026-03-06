@@ -16,11 +16,11 @@ public class AdminApplyDetailResponse {
     //  지원자(Member) ID
     private final Long memberId;
 
-    //  지원서 답변 목록
-    //  answer1, answer2, ..., answerN을
-    //  List<String> 구조로 변환하여 제공
     private final List<String> answers;
-
     //  임시 저장 여부
     private final Boolean isDraft;
+
+    private final String name;
+
+    private final String department;
 }

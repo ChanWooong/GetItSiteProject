@@ -5,6 +5,7 @@ import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
 import com.getit.domain.admin.apply.dto.mapper.AdminApplyMapper;
 import com.getit.domain.admin.apply.repository.AdminApplyRepository;
 import com.getit.domain.apply.entity.Application;
+import com.getit.domain.member.entity.MemberInfo;
 
 import jakarta.persistence.EntityNotFoundException;
 
