@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/test")
 @RequiredArgsConstructor
-// @Profile({"local","test"}) 
+@Profile({"local","test"}) 
 public class TestTokenController {
 
     private final JwtTokenProvider jwtTokenProvider;
