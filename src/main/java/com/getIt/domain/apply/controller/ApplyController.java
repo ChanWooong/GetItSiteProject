@@ -49,4 +49,10 @@ public class ApplyController {
                 .orElse(ResponseEntity.status(org.springframework.http.HttpStatus.NOT_FOUND)
                         .body(ApplyDraftLoadResponse.notFound("임시 저장된 데이터가 없습니다.")));
     }
+    @GetMapping("/me")
+    public ResponseEntity<ApplyResponse> checkSubmitted(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        boolean submitted = applyService.hasSubmitted(principalDetails.getMember().getId());
+        return ResponseEntity.ok(ApplyResponse.of(submitted));
+    }
 }
