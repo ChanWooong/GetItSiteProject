@@ -45,6 +45,12 @@ public class ApplyService {
         applicationRepository.deleteByMemberAndIsDraftTrue(member);
     }
 
+    public boolean hasSubmitted(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        return applicationRepository.existsByMemberAndIsDraftFalse(member);
+    }
+
     @Transactional
     public void saveDraft(Long memberId, ApplyDraftRequest request) {
         Member member = memberRepository.findById(memberId)
