@@ -46,6 +46,12 @@ public class Application {
     @Column(columnDefinition = "TEXT")
     private String answer5;
 
+    @Column(columnDefinition = "TEXT")
+    private String answer6;
+
+    @Column(columnDefinition = "TEXT")
+    private String answer7;
+
     //  임시 저장 여부
     @Column(name = "is_draft", nullable = false)
     private Boolean isDraft;

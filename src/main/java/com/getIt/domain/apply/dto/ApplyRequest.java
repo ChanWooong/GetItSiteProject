@@ -25,7 +25,13 @@ public class ApplyRequest {
     @NotBlank(message = "답변4는 필수 입력 항목입니다.")
     private String answer4;
 
+    @NotBlank(message = "답변5는 필수 입력 항목입니다.")
     private String answer5;
+
+    @NotBlank(message = "답변6는 필수 입력 항목입니다.")
+    private String answer6;
+
+    private String answer7;
 
     @NotNull(message = "필참 동의는 필수입니다.")
     @AssertTrue(message = "필참 동의에 체크해주세요.")

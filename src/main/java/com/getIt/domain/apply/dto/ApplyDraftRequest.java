@@ -18,5 +18,7 @@ public class ApplyDraftRequest {
     private String answer3;
     private String answer4;
     private String answer5;
+    private String answer6;
+    private String answer7;
     private Boolean agree;
 }
