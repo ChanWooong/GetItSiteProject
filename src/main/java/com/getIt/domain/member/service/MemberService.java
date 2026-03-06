@@ -1,5 +1,6 @@
 package com.getit.domain.member.service;
 
+import com.getit.domain.apply.repository.ApplicationRepository;
 import com.getit.domain.member.dto.MemberInfoRequest;
 import com.getit.domain.member.dto.MemberResponse;
 import com.getit.domain.member.entity.Member;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
+    private final ApplicationRepository applicationRepository;
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
@@ -60,4 +62,32 @@ public class MemberService {
         memberInfoRepository.save(info);
         member.completeInfo();
     }
+
+    @Transactional
+    public void updateMemberRole(Long memberId, String role) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        Role newRole;
+        try {
+            newRole = Role.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("유효하지 않은 역할입니다: " + role);
+        }
+
+        member.updateRole(newRole);
+    }
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        applicationRepository.deleteByMember(member);
+        memberRepository.delete(member);
+    }
+    public List<MemberResponse> findAllMembers() {
+        return memberRepository.findAll().stream()
+                .map(MemberResponse::from)
+                .collect(Collectors.toList());
+    }
+
 }
