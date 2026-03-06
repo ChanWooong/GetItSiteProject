@@ -1,5 +1,6 @@
 package com.getit.domain.admin.apply.service;
 
+import com.getit.domain.admin.apply.dto.response.AdminApplicantInfoResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyDetailResponse;
 import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
 
@@ -24,4 +25,6 @@ public interface AdminApplyService {
     // @return 지원서 상세 정보
     // @throws jakarta.persistence.EntityNotFoundException
     AdminApplyDetailResponse getApplyDetail(Long id);
+    AdminApplicantInfoResponse getApplicantInfo(Long id);
+
 }
