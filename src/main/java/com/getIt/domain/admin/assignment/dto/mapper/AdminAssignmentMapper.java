@@ -9,9 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AdminAssignmentMapper {
+public final class AdminAssignmentMapper {
 
-    //  Assignment + File 목록을 DTO로 변환
+    // Utility class 인스턴스 생성 방지
+    private AdminAssignmentMapper() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
+    // Assignment + File 목록을 DTO로 변환
     public static AdminAssignmentListResponse toResponse(
             Assignment assignment,
             List<AssignmentFile> files
@@ -41,7 +46,7 @@ public class AdminAssignmentMapper {
                 .build();
     }
 
-    //  AssignmentFile → FileInfo DTO 변환
+    // AssignmentFile → FileInfo DTO 변환
     private static AdminAssignmentListResponse.FileInfo toFileInfo(AssignmentFile file) {
 
         return AdminAssignmentListResponse.FileInfo.builder()
@@ -51,8 +56,7 @@ public class AdminAssignmentMapper {
                 .build();
     }
 
-
-    //  Assignment 리스트 + 파일 Map을 DTO 리스트로 변환
+    // Assignment 리스트 + 파일 Map을 DTO 리스트로 변환
     public static List<AdminAssignmentListResponse> toResponseList(
             List<Assignment> assignments,
             Map<Long, List<AssignmentFile>> fileMap

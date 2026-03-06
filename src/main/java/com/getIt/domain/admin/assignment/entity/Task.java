@@ -39,6 +39,7 @@ public class Task {
     private LocalDateTime createdAt;
 
     // Task : Assignment = 1 : N
+    @Builder.Default
     @OneToMany(mappedBy = "task")
     private List<Assignment> assignments = new ArrayList<>();
 

@@ -49,6 +49,7 @@ public class Assignment {
     private String dirName;
 
     // AssignmentFile과 1:N 관계
+    @Builder.Default
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssignmentFile> files = new ArrayList<>();
 
