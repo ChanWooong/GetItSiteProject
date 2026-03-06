@@ -22,8 +22,6 @@ public class AdminApplyListResponse {
 
     private String department;
 
-    private LocalDateTime submittedAt;
-
     //  임시 저장 여부
     private final Boolean isDraft;
 }
