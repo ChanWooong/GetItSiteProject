@@ -21,6 +21,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -59,10 +60,11 @@ public class AssignmentService {
 
         String dirName = UUID.randomUUID().toString();
 
+        LocalDateTime submittedAt = LocalDateTime.now();
         Assignment assignment = Assignment.builder()
                 .task(task)
                 .member(member)
-                .status(task.determineSubmitStatus())
+                .status(task.determineSubmitStatus(submittedAt))
                 .dirName(dirName)
                 .comment(dto.getComment())
                 .build();
@@ -148,7 +150,8 @@ public class AssignmentService {
                 assignment.getAssignmentFiles().removeIf(file -> validDeleteFileIds.contains(file.getId()));
             }
 
-            assignment.updateStatus(assignment.getTask().determineSubmitStatus());
+            LocalDateTime updatedAt = LocalDateTime.now();
+            assignment.updateStatus(assignment.getTask().determineSubmitStatus(updatedAt));
             assignment.updateComment(dto != null && StringUtils.hasText(dto.getComment()) ? dto.getComment() : null);
 
             if (!deletedFilePaths.isEmpty()) {
@@ -171,7 +174,7 @@ public class AssignmentService {
             return AssignmentUpdateResultDto.builder()
                     .assignmentId(assignment.getId())
                     .status(assignment.getStatus())
-                    .updatedAt(assignment.getUpdatedAt().toString())
+                    .updatedAt(assignment.getUpdatedAt() != null ? assignment.getUpdatedAt().toString() : null)
                     .successFiles(result != null ? result.getSuccessFiles() : new ArrayList<>())
                     .failedFiles(result != null ? result.getFailedFiles() : new ArrayList<>())
                     .build();
@@ -227,12 +230,6 @@ public class AssignmentService {
             String fileName = file.getOriginalFilename();
             String extension = StringUtils.getFilenameExtension(fileName);
 
-            if (!allowedExtensions.contains(extension)) {
-                failedFileNames.add(fileName);
-                log.warn("허용되지 않는 확장자의 파일 스킵됨({})", fileName);
-                continue;
-            }
-
             if (!StringUtils.hasText(fileName)) {
                 log.warn("올바르지 않은 이름의 파일 스킵됨({})", fileName);
                 failedFileNames.add(fileName != null ? fileName : "Unknown_File");
@@ -241,6 +238,11 @@ public class AssignmentService {
             if (file.isEmpty()) {
                 log.warn("비어있는 파일 스킵됨({})", fileName);
                 failedFileNames.add(fileName);
+                continue;
+            }
+            if (!allowedExtensions.contains(extension)) {
+                failedFileNames.add(fileName);
+                log.warn("허용되지 않는 확장자의 파일 스킵됨({})", fileName);
                 continue;
             }
 

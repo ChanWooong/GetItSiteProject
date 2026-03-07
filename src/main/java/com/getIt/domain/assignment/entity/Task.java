@@ -63,8 +63,8 @@ public class Task {
         this.deadline = deadline;
     }
 
-    public Status determineSubmitStatus() {
-        if (deadline != null && LocalDateTime.now().isAfter(deadline)) {
+    public Status determineSubmitStatus(LocalDateTime submittedAt) {
+        if (deadline != null && submittedAt.isAfter(deadline)) {
             return Status.LATE;
         } else {
             return Status.SUBMITTED;
