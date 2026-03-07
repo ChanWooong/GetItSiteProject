@@ -57,7 +57,7 @@ public class FileStorageService {
         Path filePath = baseDir.resolve(storeName).normalize();
 
         if (!filePath.startsWith(baseDir)) {
-            throw new IllegalArgumentException("허용되지 않은 파일 경로입니다.");
+            throw new IllegalArgumentException("허용되지 않는 파일 경로입니다.");
         }
 
         try {

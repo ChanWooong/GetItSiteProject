@@ -228,7 +228,6 @@ public class AssignmentService {
         List<String> failedFileNames = new ArrayList<>();
         for (MultipartFile file : files) {
             String fileName = file.getOriginalFilename();
-            String extension = StringUtils.getFilenameExtension(fileName);
 
             if (!StringUtils.hasText(fileName)) {
                 log.warn("올바르지 않은 이름의 파일 스킵됨({})", fileName);
@@ -240,6 +239,8 @@ public class AssignmentService {
                 failedFileNames.add(fileName);
                 continue;
             }
+            
+            String extension = StringUtils.getFilenameExtension(fileName);
             if (!allowedExtensions.contains(extension)) {
                 failedFileNames.add(fileName);
                 log.warn("허용되지 않는 확장자의 파일 스킵됨({})", fileName);
