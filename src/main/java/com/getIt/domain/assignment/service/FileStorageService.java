@@ -53,8 +53,8 @@ public class FileStorageService {
             throw new IllegalArgumentException("유효하지 않은 파일명입니다.");
         }
 
-        String storeName = UUID.randomUUID() + "_" + safeName;
-        Path filePath = baseDir.resolve(storeName).normalize();
+        String storedName = UUID.randomUUID() + "_" + safeName;
+        Path filePath = baseDir.resolve(storedName).normalize();
 
         if (!filePath.startsWith(baseDir)) {
             throw new IllegalArgumentException("허용되지 않는 파일 경로입니다.");

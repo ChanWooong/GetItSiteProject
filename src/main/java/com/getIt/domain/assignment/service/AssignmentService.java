@@ -239,7 +239,7 @@ public class AssignmentService {
                 failedFileNames.add(fileName);
                 continue;
             }
-            
+
             String extension = StringUtils.getFilenameExtension(fileName);
             if (!allowedExtensions.contains(extension)) {
                 failedFileNames.add(fileName);
