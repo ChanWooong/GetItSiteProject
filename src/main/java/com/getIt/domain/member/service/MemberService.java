@@ -8,6 +8,7 @@ import com.getit.domain.member.Role;
 import com.getit.domain.member.entity.MemberInfo;
 import com.getit.domain.member.repository.MemberInfoRepository;
 import com.getit.domain.member.repository.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +89,28 @@ public class MemberService {
         return memberRepository.findAll().stream()
                 .map(MemberResponse::from)
                 .collect(Collectors.toList());
+    }
+    @Transactional(readOnly = true)
+    public MemberResponse getMemberInfo(Long memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
+        return MemberResponse.from(member);
+    }
+    @Transactional
+    public void updateMemberInfo(Long memberId, MemberInfoRequest requestDto){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
+        MemberInfo memberInfo = member.getMemberInfo();
+        if(memberInfo == null){
+            throw new EntityNotFoundException("등록된 상세 정보가 없습니다.");
+        }
+        memberInfo.updateInfo(
+                requestDto.getName(),
+                requestDto.getStudentId(),
+                requestDto.getCollege(),
+                requestDto.getDepartment(),
+                requestDto.getCellNum()
+        );
     }
 
 }
