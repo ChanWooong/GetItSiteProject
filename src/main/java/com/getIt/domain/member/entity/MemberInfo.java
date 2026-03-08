@@ -35,4 +35,11 @@ public class MemberInfo {
     @Column(nullable = false)
     private String cellNum;
 
+    public void updateInfo(String name, String studentId, College college, String department, String cellNum) {
+        this.name = name;
+        this.studentId = studentId;
+        this.college = college;
+        this.department = department;
+        this.cellNum = cellNum;
+    }
 }
