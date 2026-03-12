@@ -1,9 +1,9 @@
 package com.getit.domain.admin.assignment.dto.mapper;
 
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
-import com.getit.domain.admin.assignment.entity.Assignment;
-import com.getit.domain.admin.assignment.entity.AssignmentFile;
-import com.getit.domain.admin.assignment.entity.Task;
+import com.getit.domain.assignment.entity.Assignment;
+import com.getit.domain.assignment.entity.AssignmentFile;
+import com.getit.domain.assignment.entity.Task;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ public final class AdminAssignmentMapper {
 
         return AdminAssignmentListResponse.builder()
                 .assignmentId(assignment.getId())
-                .memberId(assignment.getMemberId())
+                .memberId(assignment.getMember().getId())
                 .status(assignment.getStatus())
                 .submittedAt(assignment.getSubmittedAt())
                 .updatedAt(assignment.getUpdatedAt())
