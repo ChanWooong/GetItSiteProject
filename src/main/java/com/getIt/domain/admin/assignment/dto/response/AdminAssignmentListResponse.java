@@ -1,7 +1,7 @@
 package com.getit.domain.admin.assignment.dto.response;
 
-import com.getit.domain.admin.assignment.entity.AssignmentStatus;
-import com.getit.domain.admin.assignment.entity.TaskType;
+import com.getit.domain.assignment.Status;
+import com.getit.domain.assignment.TaskType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ public class AdminAssignmentListResponse {
     // Assignment 정보
     private Long assignmentId;
     private Long memberId;
-    private AssignmentStatus status;
+    private Status status;
     private LocalDateTime submittedAt;
     private LocalDateTime updatedAt;
     private String comment;
