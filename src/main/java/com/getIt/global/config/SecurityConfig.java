@@ -5,6 +5,7 @@ import com.getit.global.jwt.JwtAuthenticationFilter;
 import com.getit.global.jwt.JwtTokenProvider;
 import com.getit.global.security.handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -28,6 +29,12 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler successHandler ;
     private final OAuth2UserService oAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Value("${app.cors.allowed-origins}")
+    private List<String> allowedOrigins;
+
+    @Value("${app.cors.allowed-methods}")
+    private List<String> allowedMethods;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -66,7 +73,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "https://getit-web.vercel.app", "https://getitweb.vercel.app"));        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedMethods(allowedMethods);
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
