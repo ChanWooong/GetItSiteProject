@@ -5,6 +5,7 @@ import com.getit.domain.assignment.service.AssignmentService;
 import com.getit.domain.auth.dto.PrincipalDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -80,4 +81,6 @@ public class AssignmentController {
                         result
                 ));
     }
+
 }
+
