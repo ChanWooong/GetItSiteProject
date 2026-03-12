@@ -19,6 +19,5 @@ public class ApplyDraftDataDto {
     private String answer5;
     private String answer6;
     private String answer7;
-    /** DB에 저장하지 않으므로 불러올 때는 false */
     private Boolean agree;
 }
