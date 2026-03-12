@@ -38,8 +38,19 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build & Test
-        run: ./gradlew clean build
+      - name: Build (테스트 제외 - 환경변수 세팅 완료 후 -x test 제거)
+        run: ./gradlew clean build -x test
+        env:
+          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_ACCESS_TOKEN_MINUTES: ${{ secrets.JWT_ACCESS_TOKEN_MINUTES }}
+          JWT_REFRESH_TOKEN_DAYS: ${{ secrets.JWT_REFRESH_TOKEN_DAYS }}
+          APP_AUTH_REDIRECT_URI: ${{ secrets.APP_AUTH_REDIRECT_URI }}
 
       # 테스트 결과를 PR 페이지에 리포트로 표시
       - name: Publish Test Results
