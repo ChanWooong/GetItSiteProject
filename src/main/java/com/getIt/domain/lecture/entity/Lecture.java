@@ -24,16 +24,6 @@ public class Lecture {
     @Column(name = "lecture_id", updatable = false, nullable = false)
     private Long id;
 
-    // lecture가 먼저 생성 된 이후 task 생성?
-    // lecture가 생성 되는 시점에 task가 미리 존재해 있는 것이 과연 자연스러운가?
-    // 일단 nullable
-    @OneToOne(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Task task;
-
-    // qna 구현 완료 후 사용
-    // @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<Qna> qnas;
-
     @NotBlank
     @Column(nullable = false, length = 255)
     private String title;
@@ -59,6 +49,16 @@ public class Lecture {
     // 강의 자료
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureFile> lectureFiles = new ArrayList<>();
+
+    // lecture가 먼저 생성 된 이후 task 생성?
+    // lecture가 생성 되는 시점에 task가 미리 존재해 있는 것이 과연 자연스러운가?
+    // 일단 nullable
+    @OneToOne(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Task task;
+
+    // qna 구현 완료 후 사용
+    // @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    // private List<Qna> qnas;
 
     @Builder
     private Lecture(Task task, String title, String description, TrackType type, Integer week, String videoUrl) {

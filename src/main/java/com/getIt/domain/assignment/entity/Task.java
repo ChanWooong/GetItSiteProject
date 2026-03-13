@@ -16,9 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "task", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"week", "type"})
-})
+@Table(name = "task")
 @DynamicUpdate
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -40,7 +38,7 @@ public class Task {
     // private TaskType type;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id", nullable = false)
+    @JoinColumn(name = "lecture_id", nullable = false, unique = true)
     private Lecture lecture;
 
     @NotBlank
