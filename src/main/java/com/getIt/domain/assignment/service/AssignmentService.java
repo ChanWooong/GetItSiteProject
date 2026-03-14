@@ -206,7 +206,6 @@ public class AssignmentService {
         return assignments.stream()
                 .map(assignment -> {
                     Task task = assignment.getTask();
-                    // n+1 문제
                     Lecture lecture = task.getLecture();
                     return AssignmentReadResultDto.builder()
                             .assignmentId(assignment.getId())

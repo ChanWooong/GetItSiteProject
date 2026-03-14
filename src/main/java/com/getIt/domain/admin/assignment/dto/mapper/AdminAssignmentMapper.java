@@ -23,7 +23,6 @@ public final class AdminAssignmentMapper {
             List<AssignmentFile> files
     ) {
 
-        // n+1 문제
         Task task = assignment.getTask();
         Lecture lecture = task.getLecture();
 

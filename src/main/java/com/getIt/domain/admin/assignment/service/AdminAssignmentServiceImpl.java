@@ -29,7 +29,7 @@ public class AdminAssignmentServiceImpl implements AdminAssignmentService {
     public Page<AdminAssignmentListResponse> getAllAssignments(Pageable pageable) {
 
         // Assignment 페이징 조회
-        Page<Assignment> assignmentPage = assignmentRepository.findAll(pageable);
+        Page<Assignment> assignmentPage = assignmentRepository.findAllWithTaskAndLecture(pageable);
 
         List<Assignment> assignments = assignmentPage.getContent();
 
