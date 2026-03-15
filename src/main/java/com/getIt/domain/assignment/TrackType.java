@@ -1,6 +1,6 @@
 package com.getit.domain.assignment;
 
-public enum TaskType {
+public enum TrackType {
     SW,
     STARTUP;
 }

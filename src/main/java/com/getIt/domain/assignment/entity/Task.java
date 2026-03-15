@@ -1,7 +1,7 @@
 package com.getit.domain.assignment.entity;
 
 import com.getit.domain.assignment.Status;
-import com.getit.domain.assignment.TaskType;
+import com.getit.domain.lecture.entity.Lecture;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,9 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "task", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"week", "type"})
-})
+@Table(name = "task")
 @DynamicUpdate
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -30,14 +28,18 @@ public class Task {
     @Column(name = "task_id", updatable = false, nullable = false)
     private Long id;
 
-    @NotNull
-    @Column(nullable = false)
-    private Integer week;
+    // @NotNull
+    // @Column(nullable = false)
+    // private Integer week;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TaskType type;
+    // @NotNull
+    // @Enumerated(EnumType.STRING)
+    // @Column(nullable = false)
+    // private TaskType type;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id", nullable = false, unique = true)
+    private Lecture lecture;
 
     @NotBlank
     @Column(nullable = false, length = 255)
@@ -55,9 +57,8 @@ public class Task {
 
 
     @Builder
-    private Task(Integer week, TaskType type, String title, String description, LocalDateTime deadline) {
-        this.week = week;
-        this.type = type;
+    private Task(Lecture lecture, String title, String description, LocalDateTime deadline) {
+        this.lecture = lecture;
         this.title = title;
         this.description = description;
         this.deadline = deadline;

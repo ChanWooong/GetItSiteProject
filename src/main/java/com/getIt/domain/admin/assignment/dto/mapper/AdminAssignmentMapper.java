@@ -4,6 +4,7 @@ import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListRespons
 import com.getit.domain.assignment.entity.Assignment;
 import com.getit.domain.assignment.entity.AssignmentFile;
 import com.getit.domain.assignment.entity.Task;
+import com.getit.domain.lecture.entity.Lecture;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public final class AdminAssignmentMapper {
     ) {
 
         Task task = assignment.getTask();
+        Lecture lecture = task.getLecture();
 
         return AdminAssignmentListResponse.builder()
                 .assignmentId(assignment.getId())
@@ -33,8 +35,8 @@ public final class AdminAssignmentMapper {
                 .comment(assignment.getComment())
 
                 .taskId(task.getId())
-                .week(task.getWeek())
-                .taskType(task.getType())
+                .week(lecture.getWeek())
+                .trackType(lecture.getType())
                 .taskTitle(task.getTitle())
                 .deadline(task.getDeadline())
 

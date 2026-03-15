@@ -1,7 +1,7 @@
 package com.getit.domain.admin.assignment.dto.response;
 
 import com.getit.domain.assignment.Status;
-import com.getit.domain.assignment.TaskType;
+import com.getit.domain.assignment.TrackType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,7 +23,7 @@ public class AdminAssignmentListResponse {
     // Task 정보
     private Long taskId;
     private Integer week;
-    private TaskType taskType;
+    private TrackType trackType;
     private String taskTitle;
     private LocalDateTime deadline;
 

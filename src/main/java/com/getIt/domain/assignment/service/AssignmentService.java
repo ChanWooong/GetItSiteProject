@@ -7,6 +7,8 @@ import com.getit.domain.assignment.entity.Task;
 import com.getit.domain.assignment.repository.AssignmentFileRepository;
 import com.getit.domain.assignment.repository.AssignmentRepository;
 import com.getit.domain.assignment.repository.TaskRepository;
+import com.getit.domain.lecture.entity.Lecture;
+import com.getit.domain.lecture.repository.LectureRepository;
 import com.getit.domain.member.entity.Member;
 import com.getit.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,7 @@ public class AssignmentService {
     private final AssignmentFileRepository assignmentFileRepository;
     private final TaskRepository taskRepository;
     private final MemberRepository memberRepository;
+    private final LectureRepository lectureRepository;
     private final FileStorageService fileStorageService;
 
     @Transactional
@@ -55,7 +58,10 @@ public class AssignmentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        Task task = taskRepository.findByTypeAndWeek(dto.getType(), dto.getWeek())
+        // lectureId를 받아오는 API로 변경 시 수정
+        Lecture lecture = lectureRepository.findByWeekAndType(dto.getWeek(), dto.getType())
+                .orElseThrow(() -> new IllegalArgumentException("해당 lecture을 찾을 수 없습니다."));
+        Task task = taskRepository.findByLecture(lecture)
                 .orElseThrow(() -> new IllegalArgumentException("해당 task를 찾을 수 없습니다."));
 
         String dirName = UUID.randomUUID().toString();
@@ -200,10 +206,11 @@ public class AssignmentService {
         return assignments.stream()
                 .map(assignment -> {
                     Task task = assignment.getTask();
+                    Lecture lecture = task.getLecture();
                     return AssignmentReadResultDto.builder()
                             .assignmentId(assignment.getId())
-                            .week(task.getWeek())
-                            .type(task.getType())
+                            .week(lecture.getWeek())
+                            .type(lecture.getType())
                             .status(assignment.getStatus())
                             .files(
                                     assignment.getAssignmentFiles().stream()

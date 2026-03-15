@@ -1,6 +1,6 @@
 package com.getit.domain.assignment.dto;
 
-import com.getit.domain.assignment.TaskType;
+import com.getit.domain.assignment.TrackType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -16,7 +16,7 @@ public class AssignmentSubmitRequest {
     private Integer week;
 
     @NotNull
-    private TaskType type;
+    private TrackType type;
 
     private String comment;
 }

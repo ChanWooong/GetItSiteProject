@@ -1,7 +1,7 @@
 package com.getit.domain.assignment.dto;
 
 import com.getit.domain.assignment.Status;
-import com.getit.domain.assignment.TaskType;
+import com.getit.domain.assignment.TrackType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class AssignmentReadResultDto {
     private Long assignmentId;
     private Integer week;
-    private TaskType type;
+    private TrackType type;
     private Status status;
     private List<AssignmentFileInfo> files;
     private String createdAt;

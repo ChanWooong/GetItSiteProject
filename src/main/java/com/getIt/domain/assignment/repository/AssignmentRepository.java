@@ -1,6 +1,9 @@
 package com.getit.domain.assignment.repository;
 
 import com.getit.domain.assignment.entity.Assignment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,10 +12,8 @@ import java.util.List;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
-    @Query("SELECT DISTINCT a FROM Assignment a " +
-            "JOIN FETCH a.task " +
-            "LEFT JOIN FETCH a.assignmentFiles " +
-            "WHERE a.member.id = :memberId")
+    @EntityGraph(attributePaths = {"task", "task.lecture", "assignmentFiles"})
+    @Query("SELECT a FROM Assignment a WHERE a.member.id = :memberId")
     List<Assignment> findAllByMemberIdWithTaskAndFiles(@Param("memberId") Long memberId);
 
     // Admin 전체 과제 제출 조회
@@ -24,6 +25,10 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
             ORDER BY a.submittedAt DESC
             """)
     List<Assignment> findAllWithTask();
+
+    @EntityGraph(attributePaths = {"task", "task.lecture"})
+    @Query("SELECT a FROM Assignment a")
+    Page<Assignment> findAllWithTaskAndLecture(Pageable pageable);
 
 
     // 특정 Task의 과제 제출 목록 조회
