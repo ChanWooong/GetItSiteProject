@@ -106,7 +106,7 @@ public class QnaService {
         }
 
         result.sort(Comparator.comparing(QnaRoomResponse::isUnanswered).reversed()
-                .thenComparing(QnaRoomResponse::getLastMessageAt).reversed());
+                .thenComparing(QnaRoomResponse::getLastMessageAt, Comparator.reverseOrder()));
 
         return result;
     }
