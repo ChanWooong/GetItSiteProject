@@ -4,7 +4,6 @@ import com.getit.domain.assignment.Status;
 import com.getit.domain.lecture.entity.Lecture;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "task")
+@Table(name = "tasks")
 @DynamicUpdate
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -25,20 +24,11 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "task_id", updatable = false, nullable = false)
     private Long id;
 
-    // @NotNull
-    // @Column(nullable = false)
-    // private Integer week;
-
-    // @NotNull
-    // @Enumerated(EnumType.STRING)
-    // @Column(nullable = false)
-    // private TaskType type;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id", nullable = false, unique = true)
+    // Lecture : Task = 1 : N 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id", nullable = false)
     private Lecture lecture;
 
     @NotBlank
@@ -54,7 +44,6 @@ public class Task {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
 
     @Builder
     private Task(Lecture lecture, String title, String description, LocalDateTime deadline) {

@@ -2,7 +2,6 @@ package com.getit.domain.lecture.entity;
 
 import com.getit.domain.assignment.TrackType;
 import com.getit.domain.assignment.entity.Task;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +20,7 @@ public class Lecture {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lecture_id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @NotBlank
@@ -41,24 +40,20 @@ public class Lecture {
     @Column(nullable = false)
     private TrackType type;
 
-    // 영상 없는 경우도 있음
-    @Nullable
-    @Column(nullable = true)
+    // 영상 존재 여부
+    @Column(nullable = false)
+    private boolean hasVideo;
+
+    // 영상 URL
+    @Column(length = 500)
     private String videoUrl;
 
     // 강의 자료
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureFile> lectureFiles = new ArrayList<>();
 
-    // lecture가 먼저 생성 된 이후 task 생성?
-    // lecture가 생성 되는 시점에 task가 미리 존재해 있는 것이 과연 자연스러운가?
-    // 일단 nullable
     @OneToOne(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private Task task;
-
-    // qna 구현 완료 후 사용
-    // @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<Qna> qnas;
 
     @Builder
     private Lecture(Task task, String title, String description, TrackType type, Integer week, String videoUrl) {
@@ -67,11 +62,33 @@ public class Lecture {
         this.description = description;
         this.type = type;
         this.week = week;
-        this.videoUrl = videoUrl;
+
+        setVideo(videoUrl);
     }
 
-    // 강의 자료 추가를 위한 연관관계 편의 메서드
+    private void setVideo(String videoUrl) {
+        if (videoUrl == null || videoUrl.isBlank()) {
+            this.hasVideo = false;
+            this.videoUrl = null;
+        } else {
+            this.hasVideo = true;
+            this.videoUrl = videoUrl;
+        }
+    }
+
     public void addLectureFile(LectureFile file) {
         this.lectureFiles.add(file);
+    }
+
+    public void update(String title, String description, Integer week, TrackType type, String videoUrl) {
+
+        if (title != null) this.title = title;
+        if (description != null) this.description = description;
+        if (week != null) this.week = week;
+        if (type != null) this.type = type;
+
+        if (videoUrl != null) {
+            setVideo(videoUrl);
+        }
     }
 }
