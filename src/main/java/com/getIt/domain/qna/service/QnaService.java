@@ -97,7 +97,7 @@ public class QnaService {
 
             result.add(QnaRoomResponse.builder()
                     .memberId(entry.getKey())
-                    .memberName(lastQna.getMember().getMemberInfo().getName())
+                    .memberName(lastQna.getMember().getMemberInfo() != null ? lastQna.getMember().getMemberInfo().getName() : "Unknown")
                     .lastMessage(lastMessage)
                     .lastSender(lastSender)
                     .lastMessageAt(lastMessageAt)
@@ -134,9 +134,10 @@ public class QnaService {
 
     // 답변 삭제
     @Transactional
-    public void deleteAnswer(Long answerId) {
+    public void deleteAnswer(Long lectureId, Long answerId) {
         QnaAnswer answer = qnaAnswerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException("답변을 찾을 수 없습니다."));
+       validateLecture(answer.getQna(), lectureId);
         qnaAnswerRepository.delete(answer);
     }
 

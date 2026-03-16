@@ -88,7 +88,7 @@ public class QnaController {
     public ResponseEntity<Void> deleteAnswer(
             @PathVariable Long lectureId,
             @PathVariable Long answerId) {
-        qnaService.deleteAnswer(answerId);
+        qnaService.deleteAnswer(lectureId, answerId);
         return ResponseEntity.noContent().build();
     }
 }
