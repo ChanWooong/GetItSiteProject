@@ -12,6 +12,16 @@ public interface QnaRepository extends JpaRepository<Qna, Long> {
 
     List<Qna> findByLectureIdOrderByCreatedAtDesc(Long lectureId);
 
-    @Query("SELECT q FROM Qna q JOIN FETCH q.member m LEFT JOIN FETCH m.memberInfo WHERE q.lecture.id = :lectureId ORDER BY q.createdAt DESC")
-    List<Qna> findByLectureIdAndMemberIdOrderByCreatedAtAsc(Long lectureId, Long memberId);
+    @Query("""
+    SELECT q
+    FROM Qna q
+    JOIN FETCH q.member m
+    WHERE q.lecture.id = :lectureId
+      AND m.id = :memberId
+    ORDER BY q.createdAt ASC
+    """)
+    List<Qna> findByLectureIdAndMemberIdOrderByCreatedAtAsc(
+            @Param("lectureId") Long lectureId,
+            @Param("memberId") Long memberId
+    );
 }
