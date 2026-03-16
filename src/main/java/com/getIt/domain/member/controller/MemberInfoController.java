@@ -29,7 +29,14 @@ public class MemberInfoController {
     @GetMapping("/info")
     public ResponseEntity<MemberResponse> getMemberInfo(
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        MemberResponse response = memberService.getMemberInfo(principalDetails.getMember().getId());
+
+        if (principalDetails == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        MemberResponse response =
+                memberService.getMemberInfo(principalDetails.getMember().getId());
+
         return ResponseEntity.ok(response);
     }
 
