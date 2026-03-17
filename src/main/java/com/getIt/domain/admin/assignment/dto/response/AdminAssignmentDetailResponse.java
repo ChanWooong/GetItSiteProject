@@ -1,7 +1,6 @@
 package com.getit.domain.admin.assignment.dto.response;
 
 import com.getit.domain.assignment.Status;
-import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse.FileInfo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,7 +18,7 @@ public class AdminAssignmentDetailResponse {
     private LocalDateTime updatedAt;
 
     // 과제 제출 파일 목록
-    private List<FileInfo> files;
+    private List<AssignmentFileInfoDto> files;
 
     // 부가 내용
     private Long memberId;

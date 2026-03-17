@@ -1,6 +1,7 @@
 package com.getit.domain.admin.assignment.dto.mapper;
 
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
+import com.getit.domain.admin.assignment.dto.response.AssignmentFileInfoDto;
 import com.getit.domain.assignment.entity.Assignment;
 import com.getit.domain.assignment.entity.AssignmentFile;
 import com.getit.domain.assignment.entity.Task;
@@ -49,9 +50,9 @@ public final class AdminAssignmentMapper {
     }
 
     // AssignmentFile → FileInfo DTO 변환
-    private static AdminAssignmentListResponse.FileInfo toFileInfo(AssignmentFile file) {
+    private static AssignmentFileInfoDto toFileInfo(AssignmentFile file) {
 
-        return AdminAssignmentListResponse.FileInfo.builder()
+        return AssignmentFileInfoDto.builder()
                 .fileId(file.getId())
                 .fileName(file.getFileName())
                 // .filePath(file.getFilePath())
