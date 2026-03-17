@@ -1,5 +1,6 @@
 package com.getit.domain.admin.assignment.service;
 
+import com.getit.domain.admin.assignment.dto.internal.FileDownloadDto;
 import com.getit.domain.admin.assignment.dto.mapper.AdminAssignmentMapper;
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentDetailResponse;
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
@@ -8,12 +9,17 @@ import com.getit.domain.assignment.entity.AssignmentFile;
 import com.getit.domain.assignment.repository.AssignmentFileRepository;
 import com.getit.domain.assignment.repository.AssignmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,5 +75,27 @@ public class AdminAssignmentServiceImpl implements AdminAssignmentService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 과제를 찾을 수 없습니다."));
 
         return AdminAssignmentMapper.toDetailResponse(assignment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FileDownloadDto downloadFile(Long fileId) {
+
+        AssignmentFile assignmentFile = assignmentFileRepository.findById(fileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 파일을 찾을 수 없습니다."));
+
+        try {
+            Path filePath = Paths.get(assignmentFile.getFilePath()).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new IllegalStateException("파일을 읽을 수 없거나 존재하지 않습니다.");
+            }
+
+            return new FileDownloadDto(resource, assignmentFile.getFileName());
+
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("파일 경로가 잘못되었습니다.");
+        }
     }
 }

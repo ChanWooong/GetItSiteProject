@@ -1,14 +1,21 @@
 package com.getit.domain.admin.assignment.controller;
 
+import com.getit.domain.admin.assignment.dto.internal.FileDownloadDto;
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentDetailResponse;
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
 import com.getit.domain.admin.assignment.service.AdminAssignmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -38,5 +45,19 @@ public class AdminAssignmentController {
     ) {
         AdminAssignmentDetailResponse result = adminAssignmentService.getAssignmentDetail(lectureId, memberId);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/files/{fileId}/download")
+    public ResponseEntity<Resource> downloadAssignmentFile(@PathVariable Long fileId) {
+        FileDownloadDto downloadDto = adminAssignmentService.downloadFile(fileId);
+
+        ContentDisposition contentDisposition = ContentDisposition.attachment()
+                .filename(downloadDto.originFileName(), StandardCharsets.UTF_8)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                .body(downloadDto.resource());
     }
 }
