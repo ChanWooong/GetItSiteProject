@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 public class QnaChatMessage {
     private Long id;
+    private Long qnaId;
     private String content;
     private String sender;          // "USER" or "ADMIN"
     private LocalDateTime createdAt;
@@ -22,6 +23,7 @@ public class QnaChatMessage {
         return QnaChatMessage.builder()
                 .id(qna.getId())
                 .content(qna.getContent())
+                .qnaId(qna.getId())
                 .sender("USER")
                 .createdAt(qna.getCreatedAt())
                 .build();
@@ -31,6 +33,7 @@ public class QnaChatMessage {
         return QnaChatMessage.builder()
                 .id(answer.getId())
                 .content(answer.getContent())
+                .qnaId(answer.getQna().getId())
                 .sender("ADMIN")
                 .createdAt(answer.getCreatedAt())
                 .build();
