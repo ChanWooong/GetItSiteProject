@@ -80,14 +80,10 @@ public class AdminLectureService {
     }
 
     public String normalizeUrl(String newUrl) {
-    if (newUrl == null) {
-        return; // 필드가 전달되지 않았으므로 무시
+        if (newUrl == null) {
+            return null; // 필드가 전달되지 않았으므로 무시
+        }
+        return url.isBlank()? "": newUrl;
+        
     }
-    
-    if (newUrl.isEmpty()) {
-        this.videoUrl = null; // 빈 문자열이 오면 명시적으로 삭제(null 처리)
-    } else {
-        this.videoUrl = newUrl; // 새 값 반영
-    }
-}
 }
