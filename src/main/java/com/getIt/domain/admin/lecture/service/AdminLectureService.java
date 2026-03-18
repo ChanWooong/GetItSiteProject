@@ -23,7 +23,8 @@ public class AdminLectureService {
     @Transactional
     public void createLecture(LectureCreateRequestDto request) {
 
-        String videoUrl = normalizeVideoUrl(request.getVideoUrl());
+        String videoUrl = normalizeUrl(request.getVideoUrl());
+        String resourceUrl = normalizeUrl(request.getResourceUrl());
 
         Lecture lecture = Lecture.builder()
                 .title(request.getTitle())
@@ -31,6 +32,7 @@ public class AdminLectureService {
                 .week(request.getWeek())
                 .type(request.getType())
                 .videoUrl(videoUrl)
+                .resourceUrl(resourceUrl)
                 .build();
 
         lectureRepository.save(lecture);
@@ -48,7 +50,8 @@ public class AdminLectureService {
                 request.getDescription(),
                 request.getWeek(),
                 request.getType(),
-                normalizeVideoUrl(request.getVideoUrl())
+                normalizeUrl(request.getVideoUrl()),
+                normalizeUrl(request.getResourceUrl()) 
         );
     }
 
@@ -76,10 +79,11 @@ public class AdminLectureService {
         return AdminLectureMemberResponseDto.of(lecture, member);
     }
 
-    private String normalizeVideoUrl(String videoUrl) {
-        if (videoUrl == null || videoUrl.isBlank()) {
-            return null;
+    public String normalizeUrl(String newUrl) {
+        if (newUrl == null) {
+            return null; // 필드가 전달되지 않았으므로 무시
         }
-        return videoUrl;
+        return newUrl.isBlank()? "": newUrl;
+        
     }
 }

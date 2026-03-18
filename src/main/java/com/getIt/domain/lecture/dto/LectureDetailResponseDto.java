@@ -19,6 +19,7 @@ public class LectureDetailResponseDto {
     private Integer week;
     private TrackType type;
     private String videoUrl;
+    private String resourceUrl;
 
     public static LectureDetailResponseDto from(Lecture lecture) {
         return LectureDetailResponseDto.builder()
@@ -28,6 +29,7 @@ public class LectureDetailResponseDto {
                 .week(lecture.getWeek())
                 .type(lecture.getType())
                 .videoUrl(lecture.getVideoUrl())
+                .resourceUrl(lecture.getResourceUrl())
                 .build();
     }
 }

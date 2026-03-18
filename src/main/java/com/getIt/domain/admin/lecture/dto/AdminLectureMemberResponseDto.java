@@ -22,6 +22,7 @@ public class AdminLectureMemberResponseDto {
     private Integer week;
     private TrackType type;
     private String videoUrl;
+    private String resourceUrl;
 
     // Member info
     private Long memberId;
@@ -43,6 +44,7 @@ public class AdminLectureMemberResponseDto {
                 .week(lecture.getWeek())
                 .type(lecture.getType())
                 .videoUrl(lecture.getVideoUrl())
+                .resourceUrl(lecture.getResourceUrl()) 
                 .memberId(member.getId())
                 .email(member.getEmail());
 

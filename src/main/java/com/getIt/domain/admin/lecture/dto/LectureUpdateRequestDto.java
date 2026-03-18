@@ -28,4 +28,7 @@ public class LectureUpdateRequestDto {
 
     @URL(message = "올바른 URL 형식이어야 합니다.")
     private String videoUrl;
+
+    @URL(message = "올바른 URL 형식이어야 합니다.")
+    private String resourceUrl;
 }
