@@ -1,6 +1,8 @@
 package com.getit.domain.admin.assignment.dto.mapper;
 
+import com.getit.domain.admin.assignment.dto.response.AdminAssignmentDetailResponse;
 import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
+import com.getit.domain.admin.assignment.dto.response.AssignmentFileInfoDto;
 import com.getit.domain.assignment.entity.Assignment;
 import com.getit.domain.assignment.entity.AssignmentFile;
 import com.getit.domain.assignment.entity.Task;
@@ -48,13 +50,34 @@ public final class AdminAssignmentMapper {
                 .build();
     }
 
-    // AssignmentFile → FileInfo DTO 변환
-    private static AdminAssignmentListResponse.FileInfo toFileInfo(AssignmentFile file) {
+    public static AdminAssignmentDetailResponse toDetailResponse(Assignment assignment) {
 
-        return AdminAssignmentListResponse.FileInfo.builder()
+        Task task = assignment.getTask();
+
+        return AdminAssignmentDetailResponse.builder()
+                .assignmentId(assignment.getId())
+                .status(assignment.getStatus())
+                .comment(assignment.getComment())
+                .submittedAt(assignment.getSubmittedAt())
+                .updatedAt(assignment.getUpdatedAt())
+                .memberId(assignment.getMember().getId())
+                .memberName(assignment.getMember().getMemberInfo().getName())
+                .taskTitle(task.getTitle())
+                .files(
+                        assignment.getAssignmentFiles().stream()
+                                .map(AdminAssignmentMapper::toFileInfo)
+                                .collect(Collectors.toList())
+                )
+                .build();
+    }
+
+    // AssignmentFile → FileInfo DTO 변환
+    private static AssignmentFileInfoDto toFileInfo(AssignmentFile file) {
+
+        return AssignmentFileInfoDto.builder()
                 .fileId(file.getId())
                 .fileName(file.getFileName())
-                .filePath(file.getFilePath())
+                // .filePath(file.getFilePath())
                 .build();
     }
 

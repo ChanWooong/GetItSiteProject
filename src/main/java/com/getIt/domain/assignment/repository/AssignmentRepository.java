@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
@@ -29,6 +30,9 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     @EntityGraph(attributePaths = {"task", "task.lecture"})
     @Query("SELECT a FROM Assignment a")
     Page<Assignment> findAllWithTaskAndLecture(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"member.memberInfo", "task", "assignmentFiles"})
+    Optional<Assignment> findByTaskLectureIdAndMemberId(Long lectureId, Long memberId);
 
 
     // 특정 Task의 과제 제출 목록 조회

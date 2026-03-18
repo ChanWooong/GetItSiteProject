@@ -1,7 +1,6 @@
 package com.getit.domain.admin.assignment.dto.response;
 
 import com.getit.domain.assignment.Status;
-import com.getit.domain.assignment.TrackType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,23 +9,19 @@ import java.util.List;
 
 @Getter
 @Builder
-public class AdminAssignmentListResponse {
-
-    // Assignment 정보
+public class AdminAssignmentDetailResponse {
+    // 과제 메타 데이터
     private Long assignmentId;
-    private Long memberId;
     private Status status;
+    private String comment;
     private LocalDateTime submittedAt;
     private LocalDateTime updatedAt;
-    private String comment;
 
-    // Task 정보
-    private Long taskId;
-    private Integer week;
-    private TrackType trackType;
-    private String taskTitle;
-    private LocalDateTime deadline;
-
-    // 파일 목록
+    // 과제 제출 파일 목록
     private List<AssignmentFileInfoDto> files;
+
+    // 부가 내용
+    private Long memberId;
+    private String memberName;
+    private String taskTitle;
 }
