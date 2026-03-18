@@ -83,7 +83,7 @@ public class AdminLectureService {
         if (newUrl == null) {
             return null; // 필드가 전달되지 않았으므로 무시
         }
-        return url.isBlank()? "": newUrl;
+        return newUrl.isBlank()? "": newUrl;
         
     }
 }
