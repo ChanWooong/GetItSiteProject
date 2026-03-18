@@ -45,10 +45,13 @@ public class Lecture {
     private boolean hasVideo;
 
     // 영상 URL
-    @Column(length = 500)
+    @Column(columnDefinition = "TEXT")
     private String videoUrl;
 
-    // 강의 자료
+    // 강의 자료 URL (PDF, PPT 링크)
+    @Column(columnDefinition = "TEXT")
+    private String resourceUrl;
+
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureFile> lectureFiles = new ArrayList<>();
 
@@ -56,7 +59,7 @@ public class Lecture {
     private Task task;
 
     @Builder
-    private Lecture(Task task, String title, String description, TrackType type, Integer week, String videoUrl) {
+    private Lecture(Task task, String title, String description, TrackType type, Integer week, String videoUrl, String resourceUrl) {
         this.task = task;
         this.title = title;
         this.description = description;
@@ -64,6 +67,7 @@ public class Lecture {
         this.week = week;
 
         setVideo(videoUrl);
+        setResource(resourceUrl);
     }
 
     private void setVideo(String videoUrl) {
@@ -76,11 +80,19 @@ public class Lecture {
         }
     }
 
+    private void setResource(String resourceUrl) {
+        if (resourceUrl == null || resourceUrl.isBlank()) {
+            this.resourceUrl = null;
+        } else {
+            this.resourceUrl = resourceUrl;
+        }
+    }
+
     public void addLectureFile(LectureFile file) {
         this.lectureFiles.add(file);
     }
 
-    public void update(String title, String description, Integer week, TrackType type, String videoUrl) {
+    public void update(String title, String description, Integer week, TrackType type, String videoUrl, String resourceUrl) {
 
         if (title != null) this.title = title;
         if (description != null) this.description = description;
@@ -89,6 +101,10 @@ public class Lecture {
 
         if (videoUrl != null) {
             setVideo(videoUrl);
+        }
+
+        if (resourceUrl != null) {
+            setResource(resourceUrl);
         }
     }
 }

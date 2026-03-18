@@ -23,7 +23,8 @@ public class AdminLectureService {
     @Transactional
     public void createLecture(LectureCreateRequestDto request) {
 
-        String videoUrl = normalizeVideoUrl(request.getVideoUrl());
+        String videoUrl = normalizeUrl(request.getVideoUrl());
+        String resourceUrl = normalizeUrl(request.getResourceUrl());
 
         Lecture lecture = Lecture.builder()
                 .title(request.getTitle())
@@ -31,6 +32,7 @@ public class AdminLectureService {
                 .week(request.getWeek())
                 .type(request.getType())
                 .videoUrl(videoUrl)
+                .resourceUrl(resourceUrl)
                 .build();
 
         lectureRepository.save(lecture);
@@ -48,7 +50,8 @@ public class AdminLectureService {
                 request.getDescription(),
                 request.getWeek(),
                 request.getType(),
-                normalizeVideoUrl(request.getVideoUrl())
+                normalizeUrl(request.getVideoUrl()),
+                normalizeUrl(request.getResourceUrl()) 
         );
     }
 
@@ -76,10 +79,10 @@ public class AdminLectureService {
         return AdminLectureMemberResponseDto.of(lecture, member);
     }
 
-    private String normalizeVideoUrl(String videoUrl) {
-        if (videoUrl == null || videoUrl.isBlank()) {
+    private String normalizeUrl(String url) {
+        if (url == null || url.isBlank()) {
             return null;
         }
-        return videoUrl;
+        return url;
     }
 }
