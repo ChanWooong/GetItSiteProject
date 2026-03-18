@@ -3,7 +3,11 @@ package com.getit.domain.admin.lecture.controller;
 import com.getit.domain.admin.lecture.dto.AdminLectureMemberResponseDto;
 import com.getit.domain.admin.lecture.dto.LectureCreateRequestDto;
 import com.getit.domain.admin.lecture.dto.LectureUpdateRequestDto;
+import com.getit.domain.admin.lecture.dto.TaskCreateRequestDto;
+import com.getit.domain.admin.lecture.dto.TaskResponseDto;
+import com.getit.domain.admin.lecture.dto.TaskUpdateRequestDto;
 import com.getit.domain.admin.lecture.service.AdminLectureService;
+import com.getit.domain.admin.lecture.service.AdminTaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminLectureController {
 
     private final AdminLectureService adminLectureService;
+    private final AdminTaskService adminTaskService;
 
     @PostMapping
     public ResponseEntity<Void> createLecture(@Valid @RequestBody LectureCreateRequestDto request) {
@@ -42,5 +47,31 @@ public class AdminLectureController {
             @PathVariable Long id,
             @PathVariable Long memberId) {
         return ResponseEntity.ok(adminLectureService.getLectureWithMemberInfo(id, memberId));
+    }
+
+    @GetMapping("/{lectureId}/task")
+    public ResponseEntity<TaskResponseDto> getTask(@PathVariable Long lectureId) {
+        return ResponseEntity.ok(adminTaskService.getTask(lectureId));
+    }
+
+    @PostMapping("/{lectureId}/task")
+    public ResponseEntity<TaskResponseDto> createTask(
+            @PathVariable Long lectureId,
+            @Valid @RequestBody TaskCreateRequestDto request) {
+        TaskResponseDto created = adminTaskService.createTask(lectureId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PatchMapping("/{lectureId}/task")
+    public ResponseEntity<TaskResponseDto> updateTask(
+            @PathVariable Long lectureId,
+            @Valid @RequestBody TaskUpdateRequestDto request) {
+        return ResponseEntity.ok(adminTaskService.updateTask(lectureId, request));
+    }
+
+    @DeleteMapping("/{lectureId}/task")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long lectureId) {
+        adminTaskService.deleteTask(lectureId);
+        return ResponseEntity.noContent().build();
     }
 }

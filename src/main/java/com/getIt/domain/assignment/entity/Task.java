@@ -60,4 +60,23 @@ public class Task {
             return Status.SUBMITTED;
         }
     }
+
+    /** PATCH용 부분 수정. title/description에 빈 문자열은 허용하지 않음. */
+    public void update(String title, String description, LocalDateTime deadline) {
+        if (title != null) {
+            if (title.isBlank()) {
+                throw new IllegalArgumentException("제목은 비어 있을 수 없습니다.");
+            }
+            this.title = title;
+        }
+        if (description != null) {
+            if (description.isBlank()) {
+                throw new IllegalArgumentException("설명은 비어 있을 수 없습니다.");
+            }
+            this.description = description;
+        }
+        if (deadline != null) {
+            this.deadline = deadline;
+        }
+    }
 }
