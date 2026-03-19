@@ -11,6 +11,7 @@ import com.getit.domain.assignment.service.FileStorageService;
 import com.getit.domain.lecture.entity.Lecture;
 import com.getit.domain.lecture.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +50,11 @@ public class AdminTaskService {
                 .description(request.getDescription())
                 .deadline(request.getDeadline())
                 .build();
-        task = taskRepository.save(task);
+        try {
+            task = taskRepository.save(task);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 해당 강의에 과제가 존재합니다.");
+        }
         return TaskResponseDto.from(task);
     }
 

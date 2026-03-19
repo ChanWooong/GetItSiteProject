@@ -15,7 +15,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tasks")
+@Table(
+    name = "tasks",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_tasks_lecture_id", columnNames = "lecture_id")
+    }
+)
 @DynamicUpdate
 @Getter
 @EntityListeners(AuditingEntityListener.class)
