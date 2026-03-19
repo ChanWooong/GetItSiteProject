@@ -84,13 +84,14 @@ public class FileStorageService {
         }
     }
 
-    // 저장 중 오류 발생 시, 해당 과정에서 만들어진 dir, file 삭제 (롤백)
+    /** 디렉터리 삭제. 실패 시 예외를 던져 호출자 트랜잭션 롤백을 유도한다. */
     public void deleteDir(String dirName) {
         Path dirPath = getValidatedDirPath(dirName);
         try {
             FileSystemUtils.deleteRecursively(dirPath);
         } catch (IOException e) {
-            log.error("롤백 실패: {}", dirPath, e);
+            log.error("디렉터리 삭제 실패: {}", dirPath, e);
+            throw new IllegalStateException("디렉터리 삭제 중 문제가 발생했습니다: " + dirName, e);
         }
     }
 

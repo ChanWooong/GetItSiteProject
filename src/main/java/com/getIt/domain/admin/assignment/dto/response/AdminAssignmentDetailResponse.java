@@ -14,6 +14,7 @@ public class AdminAssignmentDetailResponse {
     private Long assignmentId;
     private Status status;
     private String comment;
+    private String githubUrl;
     private LocalDateTime submittedAt;
     private LocalDateTime updatedAt;
 

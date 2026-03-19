@@ -19,4 +19,7 @@ public class AssignmentSubmitRequest {
     private TrackType type;
 
     private String comment;
+
+    /** GitHub 저장소/링크 (선택) */
+    private String githubUrl;
 }

@@ -35,6 +35,7 @@ public final class AdminAssignmentMapper {
                 .submittedAt(assignment.getSubmittedAt())
                 .updatedAt(assignment.getUpdatedAt())
                 .comment(assignment.getComment())
+                .githubUrl(assignment.getGithubUrl())
 
                 .taskId(task.getId())
                 .week(lecture.getWeek())
@@ -58,6 +59,7 @@ public final class AdminAssignmentMapper {
                 .assignmentId(assignment.getId())
                 .status(assignment.getStatus())
                 .comment(assignment.getComment())
+                .githubUrl(assignment.getGithubUrl())
                 .submittedAt(assignment.getSubmittedAt())
                 .updatedAt(assignment.getUpdatedAt())
                 .memberId(assignment.getMember().getId())

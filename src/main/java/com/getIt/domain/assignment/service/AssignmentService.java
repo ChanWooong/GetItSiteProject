@@ -73,6 +73,7 @@ public class AssignmentService {
                 .status(task.determineSubmitStatus(submittedAt))
                 .dirName(dirName)
                 .comment(dto.getComment())
+                .githubUrl(StringUtils.hasText(dto.getGithubUrl()) ? dto.getGithubUrl() : null)
                 .build();
 
         try {
@@ -159,6 +160,9 @@ public class AssignmentService {
             LocalDateTime updatedAt = LocalDateTime.now();
             assignment.updateStatus(assignment.getTask().determineSubmitStatus(updatedAt));
             assignment.updateComment(dto != null && StringUtils.hasText(dto.getComment()) ? dto.getComment() : null);
+            if (dto != null) {
+                assignment.updateGithubUrl(StringUtils.hasText(dto.getGithubUrl()) ? dto.getGithubUrl() : null);
+            }
 
             if (!deletedFilePaths.isEmpty()) {
                 List<String> finalDeletedFilePaths = deletedFilePaths;
@@ -223,6 +227,7 @@ public class AssignmentService {
                             .createdAt(assignment.getSubmittedAt() != null ? assignment.getSubmittedAt().toString() : null)
                             .updatedAt(assignment.getUpdatedAt() != null ? assignment.getUpdatedAt().toString() : null)
                             .deadline(task.getDeadline() != null ? task.getDeadline().toString() : null)
+                            .githubUrl(assignment.getGithubUrl())
                             .build();
                 })
                 .toList();

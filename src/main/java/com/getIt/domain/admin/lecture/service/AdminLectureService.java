@@ -3,6 +3,8 @@ package com.getit.domain.admin.lecture.service;
 import com.getit.domain.admin.lecture.dto.AdminLectureMemberResponseDto;
 import com.getit.domain.admin.lecture.dto.LectureCreateRequestDto;
 import com.getit.domain.admin.lecture.dto.LectureUpdateRequestDto;
+import com.getit.domain.assignment.entity.Task;
+import com.getit.domain.assignment.repository.TaskRepository;
 import com.getit.domain.lecture.entity.Lecture;
 import com.getit.domain.lecture.repository.LectureRepository;
 import com.getit.domain.member.entity.Member;
@@ -17,8 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class AdminLectureService {
 
+    private static final String DEFAULT_TASK_DESCRIPTION = "과제 안내";
+
     private final LectureRepository lectureRepository;
     private final MemberRepository memberRepository;
+    private final TaskRepository taskRepository;
 
     @Transactional
     public void createLecture(LectureCreateRequestDto request) {
@@ -36,6 +41,14 @@ public class AdminLectureService {
                 .build();
 
         lectureRepository.save(lecture);
+
+        Task task = Task.builder()
+                .lecture(lecture)
+                .title(request.getTitle())
+                .description(DEFAULT_TASK_DESCRIPTION)
+                .deadline(null)
+                .build();
+        taskRepository.save(task);
     }
 
     @Transactional

@@ -18,6 +18,7 @@ public class AssignmentReadResultDto {
     private String createdAt;
     private String updatedAt;
     private String deadline;
+    private String githubUrl;
 
     @Getter
     @Builder

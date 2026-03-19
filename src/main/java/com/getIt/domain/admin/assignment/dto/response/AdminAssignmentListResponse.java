@@ -19,6 +19,7 @@ public class AdminAssignmentListResponse {
     private LocalDateTime submittedAt;
     private LocalDateTime updatedAt;
     private String comment;
+    private String githubUrl;
 
     // Task 정보
     private Long taskId;

@@ -15,7 +15,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tasks")
+@Table(
+    name = "tasks",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_tasks_lecture_id", columnNames = "lecture_id")
+    }
+)
 @DynamicUpdate
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -58,6 +63,25 @@ public class Task {
             return Status.LATE;
         } else {
             return Status.SUBMITTED;
+        }
+    }
+
+    /** PATCH용 부분 수정. title/description에 빈 문자열은 허용하지 않음. */
+    public void update(String title, String description, LocalDateTime deadline) {
+        if (title != null) {
+            if (title.isBlank()) {
+                throw new IllegalArgumentException("제목은 비어 있을 수 없습니다.");
+            }
+            this.title = title;
+        }
+        if (description != null) {
+            if (description.isBlank()) {
+                throw new IllegalArgumentException("설명은 비어 있을 수 없습니다.");
+            }
+            this.description = description;
+        }
+        if (deadline != null) {
+            this.deadline = deadline;
         }
     }
 }

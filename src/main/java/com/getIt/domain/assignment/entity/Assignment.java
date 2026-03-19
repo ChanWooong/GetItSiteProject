@@ -51,6 +51,9 @@ public class Assignment {
     @Column(columnDefinition = "TEXT")
     private String comment; // 제출 시 코멘트
 
+    @Column(columnDefinition = "TEXT")
+    private String githubUrl; // 제출 시 GitHub 링크 (선택)
+
     @NotBlank
     @Column(nullable = false)
     private String dirName; // S3 디렉토리 경로 등
@@ -67,12 +70,13 @@ public class Assignment {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Assignment(Task task, Member member, Status status, String dirName, String comment) {
+    public Assignment(Task task, Member member, Status status, String dirName, String comment, String githubUrl) {
         this.task = task;
         this.member = member;
         this.status = status;
         this.dirName = dirName;
         this.comment = comment;
+        this.githubUrl = githubUrl;
     }
 
     // 비즈니스 로직
@@ -82,6 +86,10 @@ public class Assignment {
 
     public void updateComment(String comment) {
         this.comment = comment;
+    }
+
+    public void updateGithubUrl(String githubUrl) {
+        this.githubUrl = githubUrl;
     }
 
     public void addAssignmentFile(AssignmentFile file) {
