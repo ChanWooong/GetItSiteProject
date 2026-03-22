@@ -1,19 +1,19 @@
-package com.getit.domain.admin.lecture.service;
+package com.getit.domain.lecture.service;
 
-import com.getit.domain.admin.lecture.dto.AdminLectureMemberResponseDto;
-import com.getit.domain.admin.lecture.dto.LectureCreateRequestDto;
-import com.getit.domain.admin.lecture.dto.LectureUpdateRequestDto;
+import com.getit.domain.lecture.dto.AdminLectureMemberResponseDto;
+import com.getit.domain.lecture.dto.LectureCreateRequestDto;
+import com.getit.domain.lecture.dto.LectureUpdateRequestDto;
 import com.getit.domain.assignment.entity.Task;
 import com.getit.domain.assignment.repository.TaskRepository;
 import com.getit.domain.lecture.entity.Lecture;
 import com.getit.domain.lecture.repository.LectureRepository;
 import com.getit.domain.member.entity.Member;
 import com.getit.domain.member.repository.MemberRepository;
+import com.getit.global.exception.ErrorCode;
+import com.getit.global.exception.GlobalExceptionManager.BusinessException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +24,12 @@ public class AdminLectureService {
     private final LectureRepository lectureRepository;
     private final MemberRepository memberRepository;
     private final TaskRepository taskRepository;
+
+    public Lecture findById(Long id){
+        return lectureRepository.findById(id)
+                .orElseThrow(() ->
+                        new BusinessException(ErrorCode.LECTURE_NOT_FOUND));
+    }
 
     @Transactional
     public void createLecture(LectureCreateRequestDto request) {
@@ -54,9 +60,7 @@ public class AdminLectureService {
     @Transactional
     public void updateLecture(Long id, LectureUpdateRequestDto request) {
 
-        Lecture lecture = lectureRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Lecture not found"));
+        Lecture lecture = findById(id);
 
         lecture.update(
                 request.getTitle(),
@@ -70,24 +74,17 @@ public class AdminLectureService {
 
     @Transactional
     public void deleteLecture(Long id) {
-
-        Lecture lecture = lectureRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Lecture not found"));
-
+        Lecture lecture = findById(id);
         lectureRepository.delete(lecture);
     }
 
     @Transactional(readOnly = true)
     public AdminLectureMemberResponseDto getLectureWithMemberInfo(Long lectureId, Long memberId) {
 
-        Lecture lecture = lectureRepository.findById(lectureId)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Lecture not found"));
-
+        Lecture lecture = findById(lectureId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+                        new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         return AdminLectureMemberResponseDto.of(lecture, member);
     }
