@@ -1,13 +1,13 @@
-package com.getit.domain.admin.lecture.controller;
+package com.getit.domain.lecture.controller;
 
-import com.getit.domain.admin.lecture.dto.AdminLectureMemberResponseDto;
-import com.getit.domain.admin.lecture.dto.LectureCreateRequestDto;
-import com.getit.domain.admin.lecture.dto.LectureUpdateRequestDto;
-import com.getit.domain.admin.lecture.dto.TaskCreateRequestDto;
-import com.getit.domain.admin.lecture.dto.TaskResponseDto;
-import com.getit.domain.admin.lecture.dto.TaskUpdateRequestDto;
-import com.getit.domain.admin.lecture.service.AdminLectureService;
-import com.getit.domain.admin.lecture.service.AdminTaskService;
+import com.getit.domain.lecture.dto.AdminLectureMemberResponseDto;
+import com.getit.domain.lecture.dto.LectureCreateRequestDto;
+import com.getit.domain.lecture.dto.LectureUpdateRequestDto;
+import com.getit.domain.lecture.dto.TaskCreateRequestDto;
+import com.getit.domain.lecture.dto.TaskResponseDto;
+import com.getit.domain.lecture.dto.TaskUpdateRequestDto;
+import com.getit.domain.lecture.service.AdminLectureService;
+import com.getit.domain.lecture.service.AdminTaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
