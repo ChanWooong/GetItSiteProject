@@ -11,11 +11,14 @@ import com.getit.domain.qna.entity.Qna;
 import com.getit.domain.qna.entity.QnaAnswer;
 import com.getit.domain.qna.repository.QnaAnswerRepository;
 import com.getit.domain.qna.repository.QnaRepository;
+import com.getit.global.exception.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.getit.global.exception.ErrorCode;
+import com.getit.global.exception.GlobalExceptionManager.BusinessException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -136,7 +139,7 @@ public class QnaService {
     @Transactional
     public void deleteAnswer(Long lectureId, Long answerId) {
         QnaAnswer answer = qnaAnswerRepository.findById(answerId)
-                .orElseThrow(() -> new EntityNotFoundException("답변을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ANSWER_NOT_FOUND));
        validateLecture(answer.getQna(), lectureId);
         qnaAnswerRepository.delete(answer);
     }
@@ -145,23 +148,23 @@ public class QnaService {
 
     private Qna getQna(Long qnaId) {
         return qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new EntityNotFoundException("질문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ANSWER_NOT_FOUND));
     }
 
     private Lecture getLecture(Long lectureId) {
         return lectureRepository.findById(lectureId)
-                .orElseThrow(() -> new EntityNotFoundException("강의를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.LECTURE_NOT_FOUND));
     }
 
     private void validateLecture(Qna qna, Long lectureId) {
         if (!qna.getLecture().getId().equals(lectureId)) {
-            throw new IllegalArgumentException("해당 강의의 질문이 아닙니다.");
+            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE, "해당 강의에 속한 질문, 답변이 아닙니다.");
         }
     }
 
     private void validateOwner(Qna qna, PrincipalDetails principalDetails) {
         if (!qna.getMember().getId().equals(principalDetails.getMember().getId())) {
-            throw new AccessDeniedException("본인의 질문만 삭제할 수 있습니다.");
+            throw new BusinessException(ErrorCode.NOT_QNA_AUTHOR);
         }
     }
 }
