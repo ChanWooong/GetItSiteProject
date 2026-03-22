@@ -1,12 +1,13 @@
-package com.getit.domain.admin.apply.service;
+package com.getit.domain.apply.service;
 
-import com.getit.domain.admin.apply.dto.response.AdminApplyDetailResponse;
-import com.getit.domain.admin.apply.dto.response.AdminApplyListResponse;
-import com.getit.domain.admin.apply.dto.mapper.AdminApplyMapper;
-import com.getit.domain.admin.apply.repository.AdminApplyRepository;
+import com.getit.domain.apply.dto.AdminApplyDetailResponse;
+import com.getit.domain.apply.dto.AdminApplyListResponse;
+import com.getit.domain.apply.repository.AdminApplyRepository;
+import com.getit.domain.apply.dto.ApplyDraftDataDto;
 import com.getit.domain.apply.entity.Application;
-import com.getit.domain.member.entity.MemberInfo;
 
+import com.getit.global.exception.ErrorCode;
+import com.getit.global.exception.GlobalExceptionManager;
 import jakarta.persistence.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 public class AdminApplyServiceImpl implements AdminApplyService {
 
     private final AdminApplyRepository adminApplyRepository;
-    private final AdminApplyMapper adminApplyMapper;
+    private final ApplyDraftDataDto.AdminApplyMapper adminApplyMapper;
 
     // 모든 지원서 조회 
     // - isDraft = false 인 데이터만 조회
@@ -59,7 +60,7 @@ public class AdminApplyServiceImpl implements AdminApplyService {
                 .findByIdWithMember(id)
                 .filter(app -> !app.getIsDraft())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("해당 지원서를 찾을 수 없습니다.")
+                        new GlobalExceptionManager.BusinessException(ErrorCode.APPLY_NOT_FOUND)
                 );
 
         return adminApplyMapper.toDetailResponse(application);
