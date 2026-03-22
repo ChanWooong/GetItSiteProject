@@ -1,4 +1,4 @@
-package com.getit.domain.admin.assignment.dto.response;
+package com.getit.domain.assignment.dto;
 
 import lombok.Builder;
 import lombok.Getter;

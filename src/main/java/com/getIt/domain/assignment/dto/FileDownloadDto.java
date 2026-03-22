@@ -1,4 +1,4 @@
-package com.getit.domain.admin.assignment.dto.internal;
+package com.getit.domain.assignment.dto;
 
 import org.springframework.core.io.Resource;
 
