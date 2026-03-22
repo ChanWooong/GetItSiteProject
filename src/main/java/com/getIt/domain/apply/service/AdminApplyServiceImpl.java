@@ -2,6 +2,7 @@ package com.getit.domain.apply.service;
 
 import com.getit.domain.apply.dto.AdminApplyDetailResponse;
 import com.getit.domain.apply.dto.AdminApplyListResponse;
+import com.getit.domain.apply.dto.mapper.AdminApplyMapper;
 import com.getit.domain.apply.repository.AdminApplyRepository;
 import com.getit.domain.apply.dto.ApplyDraftDataDto;
 import com.getit.domain.apply.entity.Application;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 public class AdminApplyServiceImpl implements AdminApplyService {
 
     private final AdminApplyRepository adminApplyRepository;
-    private final ApplyDraftDataDto.AdminApplyMapper adminApplyMapper;
+    private final AdminApplyMapper adminApplyMapper;
 
     // 모든 지원서 조회 
     // - isDraft = false 인 데이터만 조회
