@@ -1,8 +1,5 @@
-package com.getit.domain.admin.assignment.dto.mapper;
+package com.getit.domain.assignment.dto;
 
-import com.getit.domain.admin.assignment.dto.response.AdminAssignmentDetailResponse;
-import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
-import com.getit.domain.admin.assignment.dto.response.AssignmentFileInfoDto;
 import com.getit.domain.assignment.entity.Assignment;
 import com.getit.domain.assignment.entity.AssignmentFile;
 import com.getit.domain.assignment.entity.Task;

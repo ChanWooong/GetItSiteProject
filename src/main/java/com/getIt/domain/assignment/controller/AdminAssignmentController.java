@@ -1,9 +1,9 @@
-package com.getit.domain.admin.assignment.controller;
+package com.getit.domain.assignment.controller;
 
-import com.getit.domain.admin.assignment.dto.internal.FileDownloadDto;
-import com.getit.domain.admin.assignment.dto.response.AdminAssignmentDetailResponse;
-import com.getit.domain.admin.assignment.dto.response.AdminAssignmentListResponse;
-import com.getit.domain.admin.assignment.service.AdminAssignmentService;
+import com.getit.domain.assignment.dto.FileDownloadDto;
+import com.getit.domain.assignment.dto.AdminAssignmentDetailResponse;
+import com.getit.domain.assignment.dto.AdminAssignmentListResponse;
+import com.getit.domain.assignment.service.AdminAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
