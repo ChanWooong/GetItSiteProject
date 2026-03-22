@@ -12,6 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.getit.global.exception.GlobalExceptionManager.BusinessException;
+import com.getit.global.exception.ErrorCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,16 +28,15 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Transactional
     public void approveMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Member member = findById(memberId);
 
         if (member.getRole() == Role.ROLE_MEMBER) {
-            throw new IllegalStateException("이미 승인된 사용자입니다.");
+            throw new BusinessException(ErrorCode.ALREADY_APPROVED_MEMBER);
         }
         member.registMember();
     }
@@ -48,9 +49,7 @@ public class MemberService {
 
     @Transactional
     public void saveMemberInfo(Long memberId, MemberInfoRequest dto) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
+        Member member = findById(memberId);
         MemberInfo info = MemberInfo.builder()
                 .member(member)
                 .name(dto.getName())
@@ -66,22 +65,20 @@ public class MemberService {
 
     @Transactional
     public void updateMemberRole(Long memberId, String role) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Member member = findById(memberId);
 
         Role newRole;
         try {
             newRole = Role.valueOf(role);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("유효하지 않은 역할입니다: " + role);
+            throw new BusinessException(ErrorCode.INVALID_ROLE_UPDATE, "유효하지 않은 역할입니다: " + role);
         }
 
         member.updateRole(newRole);
     }
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Member member = findById(memberId);
         applicationRepository.deleteByMember(member);
         memberRepository.delete(member);
     }
@@ -92,18 +89,15 @@ public class MemberService {
     }
     @Transactional(readOnly = true)
     public MemberResponse getMemberInfo(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
+        Member member = findById(memberId);
         return MemberResponse.from(member);
     }
     @Transactional
     public void updateMemberInfo(Long memberId, MemberInfoRequest requestDto){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
+        Member member = findById(memberId);
         MemberInfo memberInfo = member.getMemberInfo();
         if(memberInfo == null){
-            throw new EntityNotFoundException("등록된 상세 정보가 없습니다.");
-        }
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND, "등록된 상세 정보가 없습니다.");        }
         memberInfo.updateInfo(
                 requestDto.getName(),
                 requestDto.getStudentId(),

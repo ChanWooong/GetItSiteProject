@@ -7,10 +7,11 @@ import com.getit.domain.lecture.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import com.getit.global.exception.GlobalExceptionManager.BusinessException;
+import com.getit.global.exception.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class LectureService {
 
         Lecture lecture = lectureRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Lecture not found"));
+                        new BusinessException(ErrorCode.LECTURE_NOT_FOUND));
 
         return LectureDetailResponseDto.from(lecture);
     }

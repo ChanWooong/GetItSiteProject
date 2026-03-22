@@ -1,10 +1,13 @@
 package com.getit.domain.apply.dto;
 
+import com.getit.domain.apply.entity.Application;
+import com.getit.domain.member.entity.MemberInfo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Getter
 @Builder
@@ -20,4 +23,5 @@ public class ApplyDraftDataDto {
     private String answer6;
     private String answer7;
     private Boolean agree;
+
 }

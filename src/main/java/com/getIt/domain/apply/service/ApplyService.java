@@ -7,6 +7,8 @@ import com.getit.domain.apply.dto.ApplyRequest;
 import com.getit.domain.apply.repository.ApplicationRepository;
 import com.getit.domain.member.entity.Member;
 import com.getit.domain.member.repository.MemberRepository;
+import com.getit.global.exception.ErrorCode;
+import com.getit.global.exception.GlobalExceptionManager.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +23,17 @@ public class ApplyService {
     private final ApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
 
+    private Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
     @Transactional
     public void submit(Long memberId, ApplyRequest request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Member member = findById(memberId);
         boolean alreadySubmitted = applicationRepository.existsByMemberAndIsDraftFalse(member);
         if(alreadySubmitted){
-            throw new IllegalStateException("이미 지원서를 제출하셨습니다.");
+            throw new BusinessException(ErrorCode.ALREADY_SUBMITTED_APPLY);
         }
         Application application = Application.builder()
                 .member(member)
@@ -47,8 +53,7 @@ public class ApplyService {
 
     @Transactional
     public void saveDraft(Long memberId, ApplyDraftRequest request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Member member = findById(memberId);
 
         String a1 = nullToEmpty(request.getAnswer1());
         String a2 = nullToEmpty(request.getAnswer2());
@@ -88,8 +93,7 @@ public class ApplyService {
     }
 
     public Optional<ApplyDraftDataDto> getDraft(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Member member = findById(memberId);
 
         return applicationRepository.findFirstByMemberAndIsDraftTrueOrderByIdDesc(member)
                 .map(draft -> ApplyDraftDataDto.builder()
