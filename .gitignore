@@ -1,4 +1,6 @@
 HELP.md
+mysql_data/
+,inv
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
