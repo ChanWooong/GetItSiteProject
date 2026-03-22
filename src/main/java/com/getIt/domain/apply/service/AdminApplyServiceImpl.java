@@ -1,5 +1,6 @@
 package com.getit.domain.apply.service;
 
+import com.getit.domain.apply.dto.AdminApplicantInfoResponse;
 import com.getit.domain.apply.dto.AdminApplyDetailResponse;
 import com.getit.domain.apply.dto.AdminApplyListResponse;
 import com.getit.domain.apply.dto.mapper.AdminApplyMapper;
