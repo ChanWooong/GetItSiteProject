@@ -49,6 +49,10 @@ public enum ErrorCode {
     MAX_UPLOAD_SIZE_EXCEEDED(HttpStatus.PAYLOAD_TOO_LARGE, "A006", "업로드 가능한 최대 파일 용량을 초과했습니다."),
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "A007", "지원하지 않는 파일 형식입니다."),
     NOT_ASSIGNMENT_AUTHOR(HttpStatus.FORBIDDEN, "A008", "본인의 과제만 수정/조회할 수 있습니다."),
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "A009", "해당 과제 정보를 찾을 수 없습니다."),
+    NOT_ASSIGNMENT_OWNER(HttpStatus.FORBIDDEN, "A010", "본인이 제출한 과제만 수정할 수 있습니다."),
+    ALREADY_SUBMITTED_ASSIGNMENT(HttpStatus.BAD_REQUEST, "A011", "이미 해당 주차에 과제를 제출했습니다."),
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "A012", "파일 업로드 중 오류가 발생했습니다."),
 
     // ===== 질의응답 (Q&A) =====
     QNA_NOT_FOUND(HttpStatus.NOT_FOUND, "Q001", "해당 질문/답변을 찾을 수 없습니다."),
