@@ -64,8 +64,11 @@ public class GlobalExceptionManager {
     // (1) 우리가 직접 던진 비즈니스 예외 처리 (throw new BusinessException(...))
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
-        log.warn("BusinessException: {}", e.getMessage());
-        return new ResponseEntity<>(new ErrorResponse(e.getErrorCode()), e.getErrorCode().getStatus());
+        log.warn("BusinessException: {}", e.getCustomMessage());
+        return new ResponseEntity<>(
+                new ErrorResponse(e.getErrorCode(), e.getCustomMessage()),
+                e.getErrorCode().getStatus()
+        );
     }
 
     // (2) @Valid 유효성 검사 실패 (@NotNull, @Positive 등)
