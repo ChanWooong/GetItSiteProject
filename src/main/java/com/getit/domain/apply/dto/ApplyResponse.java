@@ -14,11 +14,18 @@ public class ApplyResponse {
 
     private boolean success;
     private String message;
+    private Boolean submitted;
 
     public static ApplyResponse success(String message) {
         return ApplyResponse.builder()
                 .success(true)
                 .message(message)
+                .build();
+    }
+    public static ApplyResponse of(boolean submitted) {
+        return ApplyResponse.builder()
+                .success(true)
+                .submitted(submitted)
                 .build();
     }
 }

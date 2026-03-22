@@ -65,5 +65,7 @@ public class AdminApplyServiceImpl implements AdminApplyService {
                 );
 
         return adminApplyMapper.toDetailResponse(application);
+    
+    
     }
 }
