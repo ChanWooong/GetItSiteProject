@@ -23,7 +23,7 @@ public class ApplyService {
     private final ApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
 
-    public Member findById(Long memberId) {
+    private Member findById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
