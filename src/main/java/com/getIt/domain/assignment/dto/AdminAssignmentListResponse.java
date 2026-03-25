@@ -15,6 +15,7 @@ public class AdminAssignmentListResponse {
     // Assignment 정보
     private Long assignmentId;
     private Long memberId;
+    private String memberName;
     private Status status;
     private LocalDateTime submittedAt;
     private LocalDateTime updatedAt;

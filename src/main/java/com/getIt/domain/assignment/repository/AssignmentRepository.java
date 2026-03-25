@@ -27,7 +27,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
             """)
     List<Assignment> findAllWithTask();
 
-    @EntityGraph(attributePaths = {"task", "task.lecture"})
+    @EntityGraph(attributePaths = {"member", "member.memberInfo", "task", "task.lecture"})
     @Query("SELECT a FROM Assignment a")
     Page<Assignment> findAllWithTaskAndLecture(Pageable pageable);
 

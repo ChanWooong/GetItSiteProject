@@ -3,6 +3,7 @@ package com.getit.domain.assignment.service;
 import com.getit.domain.assignment.dto.*;
 import com.getit.domain.assignment.entity.Assignment;
 import com.getit.domain.assignment.entity.AssignmentFile;
+import com.getit.domain.assignment.repository.AssignmentFeedbackRepository;
 import com.getit.domain.assignment.entity.Task;
 import com.getit.domain.assignment.repository.AssignmentFileRepository;
 import com.getit.domain.assignment.repository.AssignmentRepository;
@@ -43,6 +44,7 @@ public class AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
     private final AssignmentFileRepository assignmentFileRepository;
+    private final AssignmentFeedbackRepository assignmentFeedbackRepository;
     private final TaskRepository taskRepository;
     private final MemberRepository memberRepository;
     private final LectureRepository lectureRepository;
@@ -266,8 +268,21 @@ public class AssignmentService {
                     Task task = assignment.getTask();
                     Lecture lecture = task.getLecture();
 
+                    List<AssignmentReadResultDto.AssignmentFeedbackInfo> feedbacks =
+                            assignmentFeedbackRepository.findAllByAssignmentIdOrderByCreatedAtAsc(assignment.getId())
+                                    .stream()
+                                    .map(f -> AssignmentReadResultDto.AssignmentFeedbackInfo.builder()
+                                            .feedbackId(f.getId())
+                                            .content(f.getContent())
+                                            .createdAt(f.getCreatedAt() != null ? f.getCreatedAt().toString() : null)
+                                            .updatedAt(f.getUpdatedAt() != null ? f.getUpdatedAt().toString() : null)
+                                            .build()
+                                    )
+                                    .toList();
+
                     return AssignmentReadResultDto.builder()
                             .assignmentId(assignment.getId())
+                            .lectureId(lecture.getId())
                             .week(lecture.getWeek())
                             .type(lecture.getType())
                             .status(assignment.getStatus())
@@ -283,6 +298,7 @@ public class AssignmentService {
                             .updatedAt(assignment.getUpdatedAt() != null ? assignment.getUpdatedAt().toString() : null)
                             .deadline(task.getDeadline() != null ? task.getDeadline().toString() : null)
                             .githubUrl(assignment.getGithubUrl())
+                            .feedbacks(feedbacks)
                             .build();
                 })
                 .toList();

@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class AssignmentReadResultDto {
     private Long assignmentId;
+    private Long lectureId;
     private Integer week;
     private TrackType type;
     private Status status;
@@ -19,11 +20,21 @@ public class AssignmentReadResultDto {
     private String updatedAt;
     private String deadline;
     private String githubUrl;
+    private List<AssignmentFeedbackInfo> feedbacks;
 
     @Getter
     @Builder
     public static class AssignmentFileInfo {
         private Long fileId;
         private String fileName;
+    }
+
+    @Getter
+    @Builder
+    public static class AssignmentFeedbackInfo {
+        private Long feedbackId;
+        private String content;
+        private String createdAt;
+        private String updatedAt;
     }
 }
