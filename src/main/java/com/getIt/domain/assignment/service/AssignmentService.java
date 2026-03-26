@@ -270,7 +270,7 @@ public class AssignmentService {
         List<Long> assignmentIds = assignments.stream().map(Assignment::getId).toList();
 
         Map<Long, List<AssignmentFeedback>> feedbackMap = assignmentFeedbackRepository
-            .findAllByAssignmentIdOrderByCreatedAtAsc(assignmentIds)
+            .findAllByAssignmentIdInOrderByCreatedAtAsc(assignmentIds)
             .stream()
             .collect(Collectors.groupingBy(AssignmentFeedback->AssignmentFeedback.getAssignment().getId()));
 
