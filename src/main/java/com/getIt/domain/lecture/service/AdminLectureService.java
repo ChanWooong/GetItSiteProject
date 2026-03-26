@@ -6,6 +6,8 @@ import com.getit.domain.lecture.dto.LectureUpdateRequestDto;
 import com.getit.domain.assignment.entity.Task;
 import com.getit.domain.assignment.repository.TaskRepository;
 import com.getit.domain.lecture.entity.Lecture;
+import com.getit.domain.lecture.entity.LectureFile;
+import com.getit.domain.lecture.repository.LectureFileRepository;
 import com.getit.domain.lecture.repository.LectureRepository;
 import com.getit.domain.member.entity.Member;
 import com.getit.domain.member.repository.MemberRepository;
@@ -24,6 +26,8 @@ public class AdminLectureService {
     private final LectureRepository lectureRepository;
     private final MemberRepository memberRepository;
     private final TaskRepository taskRepository;
+    private final LectureFileRepository lectureFileRepository;
+    private final LectureFileStorageService lectureFileStorageService;
 
     public Lecture findById(Long id){
         return lectureRepository.findById(id)
@@ -75,6 +79,9 @@ public class AdminLectureService {
     @Transactional
     public void deleteLecture(Long id) {
         Lecture lecture = findById(id);
+        for (LectureFile f : lectureFileRepository.findAllByLecture_IdOrderByIdAsc(id)) {
+            lectureFileStorageService.deleteStoredFile(f.getFilePath());
+        }
         lectureRepository.delete(lecture);
     }
 
