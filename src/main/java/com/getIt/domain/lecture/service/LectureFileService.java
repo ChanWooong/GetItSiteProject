@@ -42,12 +42,14 @@ public class LectureFileService {
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "강의를 찾을 수 없습니다."));
         List<LectureFileResponseDto> out = new ArrayList<>();
-        for (MultipartFile mf : files) {
-            if (mf == null || mf.isEmpty()) {
-                continue;
-            }
-            try {
+        List<String> storedPaths = new ArrayList<>();
+        try{
+            for(MultipartFile mf : files) {
+                if (mf == null || mf.isEmpty()) {
+                    continue;
+                }
                 String path = lectureFileStorageService.storeLectureFile(mf, lectureId);
+                storedPaths.add(path);
                 String displayName = safeOriginalName(mf.getOriginalFilename());
                 LectureFile row = LectureFile.builder()
                         .lecture(lecture)
@@ -56,16 +58,21 @@ public class LectureFileService {
                         .build();
                 lectureFileRepository.save(row);
                 out.add(toDto(row));
-            } catch (IllegalArgumentException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
             }
+        } catch (Exception e) {
+            storedPaths.forEach(path ->{
+                try{
+                    lectureFileStorageService.deleteStoredFile(path);
+                }catch (Exception ex){
+                    log.error("강의 자료 파일 삭제 실패: {}", path, ex);
+                }
+            });
         }
-        if (out.isEmpty()) {
+        if(out.isEmpty()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "유효한 파일이 없습니다.");
         }
         return out;
     }
-
     @Transactional
     public void deleteFile(Long lectureId, Long fileId) {
         LectureFile lf = lectureFileRepository.findByIdAndLecture_Id(fileId, lectureId)
