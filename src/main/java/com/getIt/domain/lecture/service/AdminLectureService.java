@@ -79,10 +79,17 @@ public class AdminLectureService {
     @Transactional
     public void deleteLecture(Long id) {
         Lecture lecture = findById(id);
-        for (LectureFile f : lectureFileRepository.findAllByLecture_IdOrderByIdAsc(id)) {
-            lectureFileStorageService.deleteStoredFile(f.getFilePath());
-        }
+        List<String> filePaths = lectureFileRepository.findAllByLecture_IdOrderByIdAsc(id).stream()
+            .map(LectureFile::getFilePath)
+            .toList();  
         lectureRepository.delete(lecture);
+        for(String path : filePaths) {
+            try{
+                lectureFileStorageService.deleteStoredFile(path);
+            } catch (Exception e) {
+                log.error("강의 자료 파일 삭제 실패: {}", path, e);
+            }
+        }
     }
 
     @Transactional(readOnly = true)
