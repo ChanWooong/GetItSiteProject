@@ -30,6 +30,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -276,7 +278,7 @@ public class AssignmentService {
                     Lecture lecture = task.getLecture();
 
                     List<AssignmentReadResultDto.AssignmentFeedbackInfo> feedbacks =
-                            feadbackMap.getOrDefault(assignment.getId(), List.of()).stream()
+                            feedbackMap.getOrDefault(assignment.getId(), List.of()).stream()
                             .map(AssignmentFeedbackResponseDto::from)
                             .toList();
 
