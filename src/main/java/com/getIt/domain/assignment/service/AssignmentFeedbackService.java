@@ -28,7 +28,7 @@ public class AssignmentFeedbackService {
         assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 과제를 찾을 수 없습니다."));
 
-        return assignmentFeedbackRepository.findAllByAssignmentIdOrderByCreatedAtAsc(assignmentId)
+        return assignmentFeedbackRepository.findAllByAssignmentIdOrderByCreatedAtAsc(List.of(assignmentId))
                 .stream()
                 .map(AssignmentFeedbackResponseDto::from)
                 .toList();
