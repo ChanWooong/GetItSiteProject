@@ -128,6 +128,7 @@ public class AssignmentService {
 
         try {
             if (hasRealNewFiles) {
+                fileStorageService.createAssignmentDir(assignment.getDirName());
                 result = processAndSaveFiles(newFiles, assignment, assignment.getDirName());
             }
 
@@ -137,8 +138,12 @@ public class AssignmentService {
 
             // 엔티티 업데이트
             assignment.updateStatus(assignment.getTask().determineSubmitStatus(LocalDateTime.now()));
-            assignment.updateComment(dto != null ? dto.getComment() : null);
-            if (dto != null) assignment.updateGithubUrl(dto.getGithubUrl());
+            if (dto != null && dto.getComment() != null) {
+                assignment.updateComment(dto.getComment());
+            }
+            if (dto != null && dto.getGithubUrl() != null) {
+                assignment.updateGithubUrl(dto.getGithubUrl());
+            }
 
             // 커밋 후 물리 파일 삭제 예약
             registerFileDeletionSync(deletedFilePaths);
@@ -351,7 +356,7 @@ public class AssignmentService {
         Path root = Path.of(storagePath).toAbsolutePath().normalize();
         Path path = Path.of(filePath).toAbsolutePath().normalize();
         if (!path.startsWith(root)) {
-            throw new SecurityException("허용되지 않은 파일 경로 접근 시도: " + filePath);
+            throw new BusinessException(ErrorCode.ACCESS_DENIED, "허용되지 않은 파일 경로 접근입니다.");
         }
         return path;
     }
