@@ -268,7 +268,7 @@ public class AssignmentService {
         List<Long> assignmentIds = assignments.stream().map(Assignment::getId).toList();
 
         Map<Long, List<AssignmentFeedback>> feedbackMap = assignmentFeedbackRepository
-            .findAllByAssignmentIdOrderByCreatedAtAsc(assignmentIds).stream()
+            .findAllByAssignmentIdOrderByCreatedAtAsc(assignmentIds)
             .stream()
             .collect(Collectors.groupingBy(AssignmentFeedback->AssignmentFeedback.getAssignment().getId()));
 
@@ -279,7 +279,13 @@ public class AssignmentService {
 
                     List<AssignmentReadResultDto.AssignmentFeedbackInfo> feedbacks =
                             feedbackMap.getOrDefault(assignment.getId(), List.of()).stream()
-                            .map(AssignmentFeedbackResponseDto::from)
+                            .map(feedback -> AssignmentReadResultDto.AssignmentFeedbackInfo.builder()
+                                    .feedbackId(feedback.getId())
+                                    .content(feedback.getContent())
+                                    .createdAt(feedback.getCreatedAt() != null ? feedback.getCreatedAt().toString() : null)
+                                    .updatedAt(feedback.getUpdatedAt() != null ? feedback.getUpdatedAt().toString() : null)
+                                    .build()
+                            )
                             .toList();
 
                     return AssignmentReadResultDto.builder()
