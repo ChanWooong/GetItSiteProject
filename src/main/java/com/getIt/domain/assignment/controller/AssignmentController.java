@@ -63,10 +63,11 @@ public class AssignmentController {
 
         AssignmentUpdateResultDto result =
                 assignmentService.updateAssignment(principalDetails.getMember().getId(), files, id, request);
+        boolean noFailedFiles = result.getFailedFiles() == null || result.getFailedFiles().isEmpty();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(AssignmentTemporaryResponse.success(
-                        result.getFailedFiles().isEmpty()
+                        noFailedFiles
                         ? "모든 수정 사항이 성공적으로 반영되었습니다."
                         : "일부 수정사항만 반영되었습니다.",
                         result

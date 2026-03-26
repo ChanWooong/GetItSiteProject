@@ -153,6 +153,7 @@ public class AssignmentService {
                     .status(assignment.getStatus())
                     .updatedAt(LocalDateTime.now().toString())
                     .successFiles(result != null ? result.getSuccessFiles() : new ArrayList<>())
+                    .failedFiles(result != null ? result.getFailedFiles() : new ArrayList<>())
                     .build();
 
         } catch (Exception e) {
