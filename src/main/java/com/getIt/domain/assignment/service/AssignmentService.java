@@ -2,6 +2,7 @@ package com.getit.domain.assignment.service;
 
 import com.getit.domain.assignment.dto.*;
 import com.getit.domain.assignment.entity.Assignment;
+
 import com.getit.domain.assignment.entity.AssignmentFile;
 import com.getit.domain.assignment.repository.AssignmentFeedbackRepository;
 import com.getit.domain.assignment.entity.Task;
@@ -12,6 +13,7 @@ import com.getit.domain.lecture.entity.Lecture;
 import com.getit.domain.lecture.repository.LectureRepository;
 import com.getit.domain.member.entity.Member;
 import com.getit.domain.member.repository.MemberRepository;
+import com.getit.domain.assignment.entity.AssignmentFeedback;
 import com.getit.global.exception.ErrorCode;
 import com.getit.global.exception.GlobalExceptionManager.BusinessException;
 import lombok.RequiredArgsConstructor;
